@@ -1,16 +1,15 @@
-package com.insurance.test.claim;
+package dp.claim;
 
-import com.insurance.actor.Customer;
-import com.insurance.actor.DispatchAgent;
-import com.insurance.claim.AccidentReport;
-import com.insurance.claim.Dispatch;
-import com.insurance.enums.DispatchStatus;
-import org.junit.Before;
-import org.junit.Test;
-
+import dp.actor.Customer;
+import dp.actor.DispatchAgent;
+import dp.claim.AccidentReport;
+import dp.claim.Dispatch;
+import dp.enums.DispatchStatus;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Dispatch 단위 테스트
@@ -26,7 +25,7 @@ public class DispatchTest {
     private AccidentReport accident;
     private DispatchAgent agent;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Customer customer = new Customer("테스트고객", "900101-1234567", "010-0000-0000", "test@test.com");
         accident = new AccidentReport(customer);

@@ -1,20 +1,16 @@
-package com.insurance.test.claim;
+package dp.claim;
 
-import com.insurance.actor.ClaimsHandler;
-import com.insurance.actor.Customer;
-import com.insurance.claim.ClaimCalculation;
-import com.insurance.claim.ClaimPayment;
-import com.insurance.claim.ClaimRequest;
-import com.insurance.claim.DamageInvestigation;
-import com.insurance.contract.InsuranceContract;
-import com.insurance.enums.CalculationStatus;
-import com.insurance.enums.InvestigationResult;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
+import dp.actor.ClaimsHandler;
+import dp.actor.Customer;
+import dp.contract.InsuranceContract;
+import dp.enums.CalculationStatus;
+import dp.enums.InvestigationResult;
 import java.time.LocalDate;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
 
 /**
  * ClaimCalculation 단위 테스트
@@ -30,7 +26,7 @@ public class ClaimCalculationTest {
 
     private DamageInvestigation investigation;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Customer customer = new Customer("테스트고객", "900101-1234567", "010-0000-0000", "test@test.com");
         InsuranceContract contract = new InsuranceContract(customer,

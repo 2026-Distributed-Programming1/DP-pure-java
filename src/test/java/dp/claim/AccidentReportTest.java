@@ -1,14 +1,13 @@
-package java.dp.claim;
+package dp.claim;
 
-import com.insurance.actor.Customer;
-import com.insurance.claim.AccidentReport;
-import com.insurance.claim.Dispatch;
-import com.insurance.enums.AccidentReportStatus;
-import com.insurance.enums.AccidentType;
-import org.junit.Before;
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import dp.actor.Customer;
+import dp.enums.AccidentReportStatus;
+import dp.enums.AccidentType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * AccidentReport 단위 테스트
@@ -23,7 +22,7 @@ public class AccidentReportTest {
 
     private Customer customer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         customer = new Customer("테스트고객", "900101-1234567", "010-0000-0000", "test@test.com");
     }

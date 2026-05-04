@@ -1,40 +1,46 @@
-package com.insurance.test.integration;
+package dp.integration;
 
-import com.insurance.actor.ClaimsHandler;
-import com.insurance.actor.Customer;
-import com.insurance.actor.DispatchAgent;
-import com.insurance.claim.AccidentReport;
-import com.insurance.claim.ClaimCalculation;
-import com.insurance.claim.ClaimPayment;
-import com.insurance.claim.ClaimRequest;
-import com.insurance.claim.DamageInvestigation;
-import com.insurance.claim.Dispatch;
-import com.insurance.claim.DispatchRecord;
-import com.insurance.common.Attachment;
-import com.insurance.common.BankAccount;
-import com.insurance.contract.InsuranceContract;
-import com.insurance.enums.AccidentReportStatus;
-import com.insurance.enums.AccidentType;
-import com.insurance.enums.AuthMethod;
-import com.insurance.enums.CalculationStatus;
-import com.insurance.enums.ClaimPaymentStatus;
-import com.insurance.enums.ClaimRequestStatus;
-import com.insurance.enums.ClaimType;
-import com.insurance.enums.DispatchRecordStatus;
-import com.insurance.enums.DispatchStatus;
-import com.insurance.enums.InvestigationResult;
-import com.insurance.enums.InvestigationStatus;
-import com.insurance.enums.NoticeMethod;
-import com.insurance.enums.PaymentType;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import dp.actor.ClaimsHandler;
+import dp.actor.Customer;
+import dp.actor.DispatchAgent;
+import dp.claim.AccidentDetail;
+import dp.claim.AccidentReport;
+import dp.claim.ClaimCalculation;
+import dp.claim.ClaimPayment;
+import dp.claim.ClaimRequest;
+import dp.claim.DamageInvestigation;
+import dp.claim.Dispatch;
+import dp.claim.DispatchRecord;
+import dp.common.Attachment;
+import dp.common.BankAccount;
+import dp.contract.InsuranceContract;
+import dp.enums.AccidentReportStatus;
+import dp.enums.AccidentSubType;
+import dp.enums.AccidentType;
+import dp.enums.AuthMethod;
+import dp.enums.CalculationStatus;
+import dp.enums.ClaimPaymentStatus;
+import dp.enums.ClaimRequestStatus;
+import dp.enums.ClaimType;
+import dp.enums.DispatchRecordStatus;
+import dp.enums.DispatchStatus;
+import dp.enums.InvestigationResult;
+import dp.enums.InvestigationStatus;
+import dp.enums.NoticeMethod;
+import dp.enums.PaymentType;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
 
 /**
  * 7️⃣ 사고/보험금 도메인 통합 테스트
@@ -52,7 +58,7 @@ public class ClaimFlowIntegrationTest {
     private ClaimsHandler handler;
     private BankAccount account;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         customer = new Customer("통합고객", "900101-1234567", "010-1111-2222", "test@test.com");
         account = new BankAccount();
@@ -192,8 +198,8 @@ public class ClaimFlowIntegrationTest {
         claim.selectClaimType(ClaimType.ACCIDENT);
 
         // 재해이므로 사고 상세 입력
-        com.insurance.claim.AccidentDetail detail = new com.insurance.claim.AccidentDetail();
-        detail.enter(com.insurance.enums.AccidentSubType.TRAFFIC,
+        AccidentDetail detail = new AccidentDetail();
+        detail.enter(AccidentSubType.TRAFFIC,
                 "후방 추돌", LocalDate.of(2025, 4, 15), "강남대로");
         claim.enterAccidentDetail(detail);
 

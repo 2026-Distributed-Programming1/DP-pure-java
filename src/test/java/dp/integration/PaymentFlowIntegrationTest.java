@@ -1,25 +1,24 @@
-package com.insurance.test.integration;
+package dp.integration;
 
-import com.insurance.actor.Customer;
-import com.insurance.common.BankAccount;
-import com.insurance.contract.Cancellation;
-import com.insurance.contract.InsuranceContract;
-import com.insurance.enums.PaymentMethod;
-import com.insurance.enums.PaymentStatus;
-import com.insurance.enums.RefundPaymentStatus;
-import com.insurance.enums.RefundStatus;
-import com.insurance.payment.Payment;
-import com.insurance.payment.PaymentItem;
-import com.insurance.payment.RefundCalculation;
-import com.insurance.payment.RefundPayment;
-import org.junit.Before;
-import org.junit.Test;
-
+import dp.actor.Customer;
+import dp.common.BankAccount;
+import dp.contract.Cancellation;
+import dp.contract.InsuranceContract;
+import dp.enums.PaymentMethod;
+import dp.enums.PaymentStatus;
+import dp.enums.RefundPaymentStatus;
+import dp.enums.RefundStatus;
+import dp.payment.Payment;
+import dp.payment.PaymentItem;
+import dp.payment.RefundCalculation;
+import dp.payment.RefundPayment;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * 8️⃣ 납입/환급 도메인 통합 테스트
@@ -35,7 +34,7 @@ public class PaymentFlowIntegrationTest {
     private InsuranceContract contract2;
     private BankAccount account;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         customer = new Customer("통합고객", "900101-1234567", "010-0000-0000", "test@test.com");
         account = new BankAccount();

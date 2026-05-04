@@ -1,26 +1,21 @@
-package com.insurance.test.claim;
+package dp.claim;
 
-import com.insurance.actor.Customer;
-import com.insurance.claim.ClaimCalculation;
-import com.insurance.claim.ClaimPayment;
-import com.insurance.claim.ClaimRequest;
-import com.insurance.claim.DamageInvestigation;
-import com.insurance.common.BankAccount;
-import com.insurance.contract.InsuranceContract;
-import com.insurance.enums.AuthMethod;
-import com.insurance.enums.ClaimPaymentStatus;
-import com.insurance.enums.InvestigationResult;
-import com.insurance.enums.NoticeMethod;
-import com.insurance.enums.PaymentType;
-import org.junit.Before;
-import org.junit.Test;
-
+import dp.actor.Customer;
+import dp.common.BankAccount;
+import dp.contract.InsuranceContract;
+import dp.enums.AuthMethod;
+import dp.enums.ClaimPaymentStatus;
+import dp.enums.InvestigationResult;
+import dp.enums.NoticeMethod;
+import dp.enums.PaymentType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * ClaimPayment 단위 테스트
@@ -37,7 +32,7 @@ public class ClaimPaymentTest {
     private ClaimCalculation calculation;
     private BankAccount account;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Customer customer = new Customer("청구고객", "900101-1234567", "010-1111-2222", "test@test.com");
         InsuranceContract contract = new InsuranceContract(customer,
