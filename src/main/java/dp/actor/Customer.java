@@ -33,6 +33,10 @@ public class Customer extends User {
         this.registeredAccounts = new ArrayList<>();
         this.registeredAt = LocalDateTime.now();
     }
+    /** 정보 수정 */
+    public void updateInfo() {
+        System.out.println("고객 정보(주소: " + address + ", 연락처: " + getContact() + ")가 업데이트되었습니다.");
+    }
 
     /** 주소 입력 */
     public void enterAddress(String address) {
