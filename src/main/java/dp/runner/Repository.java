@@ -37,6 +37,8 @@ import dp.consultation.Underwriting;
 import dp.education.EducationExecution;
 import dp.education.EducationPlan;
 import dp.education.EducationPreparation;
+import dp.sales.*;
+
 /**
  * 메모리 객체 보관소 (유스케이스 외부의 구동 코드)
  *
@@ -96,4 +98,15 @@ public class Repository {
     public static final List<InsuranceApplication> insuranceApplications = new ArrayList<>();
     public static final List<Revival> revivals = new ArrayList<>();
     public static final List<Underwriting> underwritings = new ArrayList<>();
+
+    // ===== 영업 활동 및 관리 도메인 =====
+    public static final List<ChannelRecruitment> channelRecruitments = new ArrayList<>();
+    public static final List<BonusRequest> bonusRequests = new ArrayList<>();
+    public static final List<SalesActivityManagement> salesActivityManagements = new ArrayList<>();
+    public static final List<SalesOrgEvaluation> salesOrgEvaluations = new ArrayList<>();
+    public static final List<ChannelScreening> channelScreenings = new ArrayList<>();
+    public static final List<CustomerRegistration> customerRegistrations = new ArrayList<>();
+    public static final List<ActivityPlan> activityPlans = new ArrayList<>();
+
+
 }

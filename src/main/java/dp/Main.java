@@ -2,27 +2,7 @@ package dp;
 
 import dp.runner.ConsoleHelper;
 import dp.runner.SampleData;
-import dp.runner.usecase.AccidentReportRunner;
-import dp.runner.usecase.ClaimCalculationRunner;
-import dp.runner.usecase.ClaimPaymentRunner;
-import dp.runner.usecase.ClaimRequestRunner;
-import dp.runner.usecase.DamageInvestigationRunner;
-import dp.runner.usecase.DispatchRecordRunner;
-import dp.runner.usecase.PaymentRecordRunner;
-import dp.runner.usecase.PaymentRunner;
-import dp.runner.usecase.RefundCalculationRunner;
-import dp.runner.usecase.RefundPaymentRunner;
-import dp.runner.usecase.ConsultationRequestRunner;
-import dp.runner.usecase.EducationExecutionRunner;
-import dp.runner.usecase.EducationPlanRunner;
-import dp.runner.usecase.EducationPreparationRunner;
-import dp.runner.usecase.InsuranceApplicationRunner;
-import dp.runner.usecase.InterviewRecordRunner;
-import dp.runner.usecase.InterviewScheduleRunner;
-import dp.runner.usecase.PolicyApplicationRunner;
-import dp.runner.usecase.ProposalRunner;
-import dp.runner.usecase.RevivalRunner;
-import dp.runner.usecase.UnderwritingRunner;
+import dp.runner.usecase.*;
 
 /**
  * 인터랙티브 메인 진입점
@@ -65,6 +45,13 @@ public class Main {
                     "[4-UC9] 보험을 신청한다",
                     "[4-UC10] 부활을 요청한다",
                     "[4-UC11] 인수 심사를 한다",
+                    "판매채널을 모집한다",
+                    "성과급 지급을 요청한다",
+                    "영업 활동을 관리한다",
+                    "영업조직을 평가한다",
+                    "판매채널 채용을 심사한다",
+                    "고객 정보를 등록한다",
+                    "활동 계획을 작성한다",
                     "종료");
 
             switch (choice) {
@@ -132,6 +119,27 @@ public class Main {
                     UnderwritingRunner.run();
                     break;
                 case 22:
+                    ChannelRecruitmentRunner.run();
+                    break;
+                case 23:
+                    BonusRequestRunner.run();
+                    break;
+                case 24:
+                    SalesActivityRunner.run();
+                    break;
+                case 25:
+                    SalesOrgEvaluationRunner.run();
+                    break;
+                case 26:
+                    ChannelScreeningRunner.run();
+                    break;
+                case 27:
+                    CustomerRegistrationRunner.run();
+                    break;
+                case 28:
+                    ActivityPlanRunner.run();
+                    break;
+                case 29:
                     System.out.println("\n프로그램을 종료합니다.");
                     return;
             }
