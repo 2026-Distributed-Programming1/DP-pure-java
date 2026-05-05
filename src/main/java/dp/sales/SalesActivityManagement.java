@@ -2,37 +2,80 @@ package dp.sales;
 
 import dp.enums.ChannelType;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 영업 활동 관리 (SalesActivityManagement)
  * 채널별 활동 현황을 모니터링하고 지표를 관리하는 클래스이다.
  */
 public class SalesActivityManagement {
-    private Date startDate;
-    private Date endDate;
-    private ChannelType channelType; // enum
-    private String channelName;
-    private Integer visitCount;
-    private Integer contractCount;
-    private Double conversionRate;
-    private Double achievementRate;
-    private String improvementContent;
-    private Integer revisedTarget;
-    private String managementNo;
-    private Date registeredAt; // DateTime
+    private LocalDate startDate;           // 관리 기간 시작일
+    private LocalDate endDate;             // 관리 기간 종료일
+    private ChannelType channelType;       // 채널 유형 - 설계사/대리점 (enum)
+    private String channelName;            // 채널명
+    private Integer visitCount;            // 방문건수
+    private Integer contractCount;         // 계약건수
+    private Double conversionRate;         // 전환율 - 계약건수/방문건수 %
+    private Double achievementRate;        // 목표달성률 - 실적/목표 %
+    private String improvementContent;     // 개선 지시 내용
+    private Integer revisedTarget;         // 수정 목표
+    private String managementNo;           // 관리번호
+    private LocalDateTime registeredAt;    // 등록 일시
 
     public void loadActivityTable() {}
+
     public void search() {}
+
     public void showNoResultMessage() {}
+
     public void sortByAchievementRate() {}
+
     public void highlightLowAchievement() {}
+
     public void openDetailPanel() {}
+
     public void closeDetailPanel() {}
+
     public void openImprovementForm() {}
-    public void saveImprovement() {}
+
+    public void saveImprovement() {
+        this.registeredAt = LocalDateTime.now();
+        this.managementNo = "SA-" + registeredAt.toString().replaceAll("[^0-9]", "").substring(0, 14);
+    }
+
     public void showSaveSuccess() {}
+
     public void showSaveError() {}
+
     public void cancelImprovement() {}
+
     public void navigateToRecruitment() {}
+
+    // Runner에서 실제 사용하는 getter/setter만 유지
+    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+    public void setChannelType(ChannelType channelType) { this.channelType = channelType; }
+    public String getChannelName() { return channelName; }
+    public void setChannelName(String channelName) { this.channelName = channelName; }
+    public void setVisitCount(Integer visitCount) {
+        this.visitCount = visitCount;
+        recalcConversionRate();
+    }
+    public void setContractCount(Integer contractCount) {
+        this.contractCount = contractCount;
+        recalcConversionRate();
+    }
+    public Double getConversionRate() { return conversionRate; }
+    public void setAchievementRate(Double achievementRate) { this.achievementRate = achievementRate; }
+    public void setImprovementContent(String improvementContent) { this.improvementContent = improvementContent; }
+    public void setRevisedTarget(Integer revisedTarget) { this.revisedTarget = revisedTarget; }
+    public String getManagementNo() { return managementNo; }
+    public LocalDateTime getRegisteredAt() { return registeredAt; }
+
+    private void recalcConversionRate() {
+        if (visitCount != null && visitCount > 0 && contractCount != null) {
+            this.conversionRate = (double) contractCount / visitCount * 100;
+        }
+    }
 }

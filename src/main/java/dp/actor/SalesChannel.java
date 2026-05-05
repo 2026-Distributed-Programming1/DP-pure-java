@@ -4,48 +4,33 @@ import dp.consultation.ConsultationRequest;
 import dp.consultation.PolicyApplication;
 import dp.enums.ChannelType;
 
-import java.time.LocalDate;
-
 /**
  * 판매채널 (SalesChannel)
  * Designer, Agency 의 부모 클래스 (Generalization)
  */
 public class SalesChannel {
 
-    private int channelId;
-    /** name: 4.2.9에 보면 channelName이라고 나와 있어서 통일해야 할 듯 합니다 */
-    private String name;
-    private String location;
-    private LocalDate startDate;
-    private ChannelType channelType; // enum
+    private String channelId;        // 채널 ID
+    private String channelName;      // 채널명
+    private ChannelType channelType; // 채널 유형 - 설계사/대리점 (enum)
 
-    public void getActivityDetail() {}
-    public SalesChannel(int channelId, String name, String location) {
-        this.channelId = channelId;
-        this.name = name;
-        this.location = location;
-        this.startDate = LocalDate.now();
+    public SalesChannel(int channelId, String channelName, String location) {
+        this.channelId = String.valueOf(channelId);
+        this.channelName = channelName;
     }
 
+    // ===== 다이어그램 메서드 =====
+    public void getActivityDetail() {}
+
+    // ===== Runner 호출 중이므로 유지 =====
     public void acceptConsultation(ConsultationRequest request) {
         request.accept();
-        System.out.println("  [" + name + "] 상담 요청을 수락했습니다.");
-    }
-
-    public void manageInterviewSchedule() {
-        System.out.println("  [" + name + "] 면담 일정을 관리합니다.");
-    }
-
-    public void manageInterviewRecord() {
-        System.out.println("  [" + name + "] 면담 기록을 관리합니다.");
+        System.out.println("  [" + channelName + "] 상담 요청을 수락했습니다.");
     }
 
     public PolicyApplication createPolicyApplication() {
         return new PolicyApplication();
     }
 
-    public int getChannelId() { return channelId; }
-    public String getName() { return name; }
-    public String getLocation() { return location; }
-    public LocalDate getStartDate() { return startDate; }
+    public String getName() { return channelName; }
 }

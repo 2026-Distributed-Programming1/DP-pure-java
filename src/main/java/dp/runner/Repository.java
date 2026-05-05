@@ -12,7 +12,10 @@ import dp.claim.DamageInvestigation;
 import dp.claim.Dispatch;
 import dp.claim.DispatchRecord;
 import dp.contract.Cancellation;
+import dp.contract.Contract;
+import dp.contract.ContractStatistics;
 import dp.contract.InsuranceContract;
+import dp.inquiry.Inquiry;
 import dp.payment.OverdueNoticeSetting;
 import dp.payment.Payment;
 import dp.payment.PaymentRecord;
@@ -37,6 +40,8 @@ import dp.consultation.Underwriting;
 import dp.education.EducationExecution;
 import dp.education.EducationPlan;
 import dp.education.EducationPreparation;
+import dp.sales.*;
+
 /**
  * 메모리 객체 보관소 (유스케이스 외부의 구동 코드)
  *
@@ -56,6 +61,8 @@ public class Repository {
     public static final List<InsuranceContract> contracts = new ArrayList<>();
     public static final List<Cancellation> cancellations = new ArrayList<>();
 
+    public static final List<Contract> contractInfos = new ArrayList<>();
+    public static final List<ContractStatistics> contractStatisticsList = new ArrayList<>();
     // ===== 7️⃣ 도메인 =====
     public static final List<AccidentReport> accidentReports = new ArrayList<>();
     public static final List<Dispatch> dispatches = new ArrayList<>();
@@ -96,4 +103,16 @@ public class Repository {
     public static final List<InsuranceApplication> insuranceApplications = new ArrayList<>();
     public static final List<Revival> revivals = new ArrayList<>();
     public static final List<Underwriting> underwritings = new ArrayList<>();
+
+    // ===== 영업 활동 및 관리 도메인 =====
+    public static final List<ChannelRecruitment> channelRecruitments = new ArrayList<>();
+    public static final List<BonusRequest> bonusRequests = new ArrayList<>();
+    public static final List<SalesActivityManagement> salesActivityManagements = new ArrayList<>();
+    public static final List<SalesOrgEvaluation> salesOrgEvaluations = new ArrayList<>();
+    public static final List<ChannelScreening> channelScreenings = new ArrayList<>();
+    public static final List<CustomerRegistration> customerRegistrations = new ArrayList<>();
+    public static final List<ActivityPlan> activityPlans = new ArrayList<>();
+
+    // ===== 고객 문의 도메인 =====
+    public static final List<Inquiry> inquiries = new ArrayList<>();
 }
