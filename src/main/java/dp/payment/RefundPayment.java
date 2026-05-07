@@ -137,11 +137,6 @@ public class RefundPayment {
         System.out.println("[RefundPayment] " + noticeFailureMessage);
     }
 
-    /** 목록으로 돌아가기 (A1) */
-    public void goBackToList() {
-        System.out.println("[RefundPayment] 환급금 지급 목록으로 돌아가기");
-    }
-
     /** 외부에서 계좌를 명시적으로 주입할 때 사용 (loadAccountInfo가 채우지 못한 경우 대비) */
     public void setAccount(BankAccount account) {
         this.account = account;

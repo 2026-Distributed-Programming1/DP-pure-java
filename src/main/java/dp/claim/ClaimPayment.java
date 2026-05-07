@@ -139,11 +139,6 @@ public class ClaimPayment {
         }
     }
 
-    /** 이전 페이지 이동 (A2) */
-    public void goBack() {
-        System.out.println("[ClaimPayment] 이전 페이지로 이동");
-    }
-
     /** 사고건 종결 처리 */
     public void close() {
         this.status = ClaimPaymentStatus.CLOSED;

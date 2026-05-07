@@ -54,7 +54,6 @@ public class RefundPaymentRunner {
                 "OTP 인증 후 이체 실행 (정상)",
                 "목록으로 돌아가기 (A1)");
         if (choice == 2) {
-            payment.goBackToList();
             return;
         }
 
@@ -121,7 +120,6 @@ public class RefundPaymentRunner {
                 "OTP 인증 후 이체 실행 (정상)",
                 "목록으로 돌아가기 (A1)");
         if (choice == 2) {
-            payment.goBackToList();
             return;
         }
 

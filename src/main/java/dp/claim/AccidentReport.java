@@ -21,7 +21,7 @@ public class AccidentReport {
     private Customer customer;                   // 사고자
     private String vehicleNo;                    // 차량번호
     private String ownerName;                    // 자동차 소유자명/피보험자명
-    private String contact;                      // 휴대폰 번호
+    private String phoneNo;                      // 휴대폰 번호
     private AccidentType accidentType;           // 사고 유형 - 사물/사람
     private String damageType;                   // 피해 유형
     private String location;                     // 사고 위치
@@ -44,7 +44,7 @@ public class AccidentReport {
     public void enterVehicleInfo(String vehicleNo, String ownerName, String contact) {
         this.vehicleNo = vehicleNo;
         this.ownerName = ownerName;
-        this.contact = contact;
+        this.phoneNo = contact;
     }
 
     /** 사고 유형 선택 */
@@ -70,7 +70,7 @@ public class AccidentReport {
 
     /** 필수 항목 검증 */
     public boolean validateRequiredFields() {
-        return vehicleNo != null && ownerName != null && contact != null
+        return vehicleNo != null && ownerName != null && phoneNo != null
                 && accidentType != null && location != null && agreedTerms;
     }
 
@@ -108,7 +108,7 @@ public class AccidentReport {
     public Customer getCustomer() { return customer; }
     public String getVehicleNo() { return vehicleNo; }
     public String getOwnerName() { return ownerName; }
-    public String getContact() { return contact; }
+    public String getPhoneNo() { return phoneNo; }
     public AccidentType getAccidentType() { return accidentType; }
     public String getDamageType() { return damageType; }
     public String getLocation() { return location; }

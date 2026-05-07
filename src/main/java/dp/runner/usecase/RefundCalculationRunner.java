@@ -64,7 +64,6 @@ public class RefundCalculationRunner {
                     refund.exportPDF();
                     break;
                 case 4:
-                    refund.goBackToList();
                     return;
             }
         }
@@ -104,7 +103,6 @@ public class RefundCalculationRunner {
                     refund.exportPDF();
                     break;
                 case 4:
-                    refund.goBackToList();
                     return;
             }
         }

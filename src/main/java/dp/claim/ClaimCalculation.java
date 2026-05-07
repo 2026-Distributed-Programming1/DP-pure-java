@@ -16,7 +16,9 @@ public class ClaimCalculation {
     private static int sequence = 0;          // 산출번호 자동 부여용
 
     // 본 구현에서 사용하는 가상의 약관 기본값 (시나리오·다이어그램 외부의 외부 시스템 데이터)
+    // 기본 공제액
     private static final long DEFAULT_DEDUCTIBLE = 100_000L;
+    // 기본 보장한도
     private static final long DEFAULT_COVERAGE_LIMIT = 100_000_000L;
 
     private String calculationNo;             // 산출번호
@@ -110,12 +112,6 @@ public class ClaimCalculation {
             this.status = CalculationStatus.CLOSED;
             System.out.println("[ClaimCalculation] 공제액 초과 종결: " + calculationNo);
         }
-    }
-
-    /** 이전 페이지 이동 (A2) */
-    public void goBack() {
-        // 페이지 이동은 UI 행위이므로 본 구현에서는 단순히 로그만 출력
-        System.out.println("[ClaimCalculation] 이전 페이지로 이동");
     }
 
     // Getter

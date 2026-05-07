@@ -80,7 +80,6 @@ public class ClaimCalculationRunner {
                 handleApproval(calc, handler);
                 return;
             } else if (choice == 3) {
-                calc.goBack();
                 return;
             }
         }
@@ -133,7 +132,6 @@ public class ClaimCalculationRunner {
                 handleApprovalChained(calc, handler);
                 return;
             } else if (choice == 3) {
-                calc.goBack();
                 return;
             }
         }

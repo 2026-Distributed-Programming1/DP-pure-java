@@ -160,7 +160,7 @@ public class ContractInfoRunner {
 
         if (action == 1) {
             // A3) [만기 계약 관리] → [만기 계약을 관리한다] 유스케이스로 이동
-            contract.naviageToExpiry();
+            contract.navigateToExpiry();
             ConsoleHelper.printInfo("[A3] [만기 계약을 관리한다] 유스케이스 1번으로 이동합니다.");
         } else if (action == 2) {
             // A4) [계약 통계] → [계약 통계 정보를 관리한다] 유스케이스로 이동

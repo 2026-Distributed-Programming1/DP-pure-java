@@ -152,11 +152,6 @@ public class RefundCalculation {
         System.out.println("[RefundCalculation] 확정 저장 오류 발생: " + refundNo);
     }
 
-    /** 목록으로 돌아가기 (A3) */
-    public void goBackToList() {
-        System.out.println("[RefundCalculation] 환급금 목록으로 돌아가기");
-    }
-
     // Getter
     public String getRefundNo() { return refundNo; }
     public Cancellation getCancellation() { return cancellation; }

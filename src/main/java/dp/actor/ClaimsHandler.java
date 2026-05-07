@@ -16,10 +16,8 @@ public class ClaimsHandler extends Employee {
         this.transferLimit = limit;
     }
 
-    // 7️⃣ 도메인 메서드들은 시나리오 추적성을 위한 진입점이지만,
     // 실제 비즈니스 로직은 도메인 객체(DamageInvestigation, ClaimCalculation, ClaimPayment 등)에 있다.
-    // 본 구현에서는 행위자 메서드를 본문 없이 정의하지 않고, 호출 측(Main)에서 직접
-    // 도메인 객체의 메서드를 호출하는 방식으로 진행한다.
+    // 본 구현에서는 행위자 메서드를 본문 없이 정의하지 않고, 호출 측(Main)에서 직접 도메인 객체의 메서드를 호출하는 방식으로 진행한다.
 
     // Getter
     public long getTransferLimit() { return transferLimit; }

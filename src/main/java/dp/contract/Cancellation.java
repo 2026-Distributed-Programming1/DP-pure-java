@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**
  * 해지 (Cancellation)
  *
- * 6️⃣ 계약 관리 도메인 + 8️⃣ 도메인의 RefundCalculation이 함께 참조한다.
+ * RefundCalculation이 함께 참조한다.
  */
 public class Cancellation {
 

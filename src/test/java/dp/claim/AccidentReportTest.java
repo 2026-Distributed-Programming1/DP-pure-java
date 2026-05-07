@@ -45,7 +45,7 @@ public class AccidentReportTest {
 
         assertEquals("12가3456", report.getVehicleNo());
         assertEquals("홍길동", report.getOwnerName());
-        assertEquals("010-1111-2222", report.getContact());
+        assertEquals("010-1111-2222", report.getPhoneNo());
     }
 
     @Test

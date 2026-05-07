@@ -30,11 +30,6 @@ public class Attachment {
         this.uploadedAt = LocalDateTime.now();
     }
 
-    /** 용량 검증 (예: 10MB) */
-    public boolean validateSize(long maxSize) {
-        return this.fileSize <= maxSize;
-    }
-
     /**
      * 삭제
      * 외부 파일시스템 연동이 필요한 부분이므로 더미로 처리한다.

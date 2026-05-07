@@ -42,7 +42,6 @@ public class ClaimPaymentRunner {
                 "예약 지급 (A1)",
                 "이전 페이지 (A2)");
         if (typeChoice == 3) {
-            payment.goBack();
             return;
         }
 
@@ -113,7 +112,6 @@ public class ClaimPaymentRunner {
                 "예약 지급 (A1)",
                 "이전 페이지 (A2)");
         if (typeChoice == 3) {
-            payment.goBack();
             return;
         }
 
