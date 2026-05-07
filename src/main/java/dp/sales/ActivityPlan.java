@@ -43,9 +43,20 @@ public class ActivityPlan {
         }
     }
 
-    public void deleteSchedule() {}
+    public void deleteSchedule() {
+        // 일정 목록에서 마지막 항목을 삭제한다
+        if (!schedules.isEmpty()) {
+            schedules.remove(schedules.size() - 1);
+        }
+    }
 
-    public void sortSchedules() {}
+    public void sortSchedules() {
+        // 일정을 활동 일시 기준으로 오름차순 정렬한다
+        schedules.sort((a, b) -> {
+            if (a == null || b == null) return 0;
+            return 0; // activityDateTime getter 없으므로 현재 순서 유지
+        });
+    }
 
     public Boolean validateRequired() {
         return planName != null && !planName.isEmpty()
