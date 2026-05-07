@@ -23,13 +23,13 @@ public class SalesActivityManagement {
     private String managementNo;           // 관리번호
     private LocalDateTime registeredAt;    // 등록 일시
 
-    public void loadActivityTable() {}
+    public void loadActivityTable() {} //전체 현황 테이블 출력
 
-    public void search() {}
+    public void search() {} //조건 필터링
 
     public void showNoResultMessage() {}
 
-    public void sortByAchievementRate() {}
+    public void sortByAchievementRate() {} //목표달성률 낮은 순 정렬
 
     public void highlightLowAchievement() {}
 
