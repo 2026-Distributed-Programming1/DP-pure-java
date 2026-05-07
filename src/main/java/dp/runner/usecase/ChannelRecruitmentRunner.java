@@ -50,11 +50,11 @@ public class ChannelRecruitmentRunner {
         ChannelRecruitment recruitment = new ChannelRecruitment();
         recruitment.loadRecruitmentList();
         ConsoleHelper.printStage("시스템", "채널 모집 화면을 출력합니다.");
-        ConsoleHelper.printInfo("┌─────────────────────────────────────────────────────────┐");
-        ConsoleHelper.printInfo("│  [기존 모집 공고 목록]                                     │");
-        ConsoleHelper.printInfo("│  모집번호 / 채널유형 / 모집인원 / 모집기간 / 등록일시           │");
+        ConsoleHelper.printInfo(" ───────────────────────────────────────────────────────── ");
+        ConsoleHelper.printInfo("   [기존 모집 공고 목록]                                      ");
+        ConsoleHelper.printInfo("   모집번호 / 채널유형 / 모집인원 / 모집기간 / 등록일시            ");
         if (Repository.channelRecruitments.isEmpty()) {
-            ConsoleHelper.printInfo("│  (등록된 모집 공고가 없습니다.)                              │");
+            ConsoleHelper.printInfo("   (등록된 모집 공고가 없습니다.)                               ");
         } else {
             for (ChannelRecruitment r : Repository.channelRecruitments) {
                 String type = r.getChannelType() == ChannelType.DESIGNER ? "설계사" : "대리점";
