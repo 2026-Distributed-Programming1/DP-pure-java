@@ -4,8 +4,10 @@ import dp.actor.EducationTrainer;
 import dp.education.Attendance;
 import dp.education.EducationExecution;
 import dp.education.EducationPreparation;
+import dp.dao.EducationExecutionDAO;
+import dp.dao.EducationPreparationDAO;
+import dp.dao.EducationTrainerDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 
 /**
@@ -37,15 +39,15 @@ public class EducationExecutionRunner {
         System.out.println("UC: 교육을 진행한다");
         ConsoleHelper.printDoubleDivider();
 
-        if (Repository.educationPreparations.isEmpty()) {
+        List<EducationPreparation> educationPreparations = EducationPreparationDAO.findAll();
+        if (educationPreparations.isEmpty()) {
             ConsoleHelper.printError("등록된 교육 제반이 없습니다. 먼저 교육 제반을 등록해주세요.");
             ConsoleHelper.waitEnter();
             return;
         }
 
-        EducationPreparation preparation = Repository.educationPreparations.get(
-                Repository.educationPreparations.size() - 1);
-        EducationTrainer trainer = Repository.educationTrainers.get(0);
+        EducationPreparation preparation = educationPreparations.get(educationPreparations.size() - 1);
+        EducationTrainer trainer = EducationTrainerDAO.findAll().get(0);
         EducationExecution execution = trainer.conductEducation(preparation);
 
         // 2. 시스템은 교육 진행 화면을 출력한다. (출석 대상자 명단 자동 로드)
@@ -94,7 +96,7 @@ public class EducationExecutionRunner {
         if (!memo.isEmpty()) execution.setMemo(memo);
 
         execution.complete();
-        Repository.educationExecutions.add(execution);
+        EducationExecutionDAO.save(execution);
 
         // 8. 시스템은 판매채널에게 수료 알림을 자동 발송한다.
         execution.sendCompletionNotice();

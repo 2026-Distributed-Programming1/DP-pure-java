@@ -13,6 +13,11 @@ public class InsuranceReviewer extends Employee {
         super(name, contact, email);
     }
 
+    /** DB 로딩용 생성자 */
+    public InsuranceReviewer(String employeeId, String name, String dept, String position) {
+        super(employeeId, name, dept, position);
+    }
+
     public Underwriting startUnderwriting(PolicyApplication application) {
         Underwriting underwriting = new Underwriting();
         underwriting.startReview();

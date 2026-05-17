@@ -2,8 +2,8 @@ package dp.runner.usecase;
 
 import dp.enums.ChannelType;
 import dp.enums.EvaluationGrade;
+import dp.dao.BonusRequestDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import dp.sales.BonusRequest;
 
 /**
@@ -123,7 +123,7 @@ public class BonusRequestRunner {
             bonusRequest.submit();
         }
 
-        Repository.bonusRequests.add(bonusRequest);
+        BonusRequestDAO.save(bonusRequest);
 
         bonusRequest.showRequestResult();
         ConsoleHelper.printStage("시스템", "성과급 지급 요청서를 인사 담당자에게 자동 전달합니다.");

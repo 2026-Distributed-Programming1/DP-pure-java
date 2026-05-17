@@ -4,8 +4,10 @@ import dp.contract.Cancellation;
 import dp.enums.RefundPaymentStatus;
 import dp.payment.RefundCalculation;
 import dp.payment.RefundPayment;
+import dp.dao.CancellationDAO;
+import dp.dao.RefundCalculationDAO;
+import dp.dao.RefundPaymentDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 
 /**
@@ -24,7 +26,7 @@ public class RefundListRunner {
         ConsoleHelper.printDoubleDivider();
 
         while (true) {
-            List<Cancellation> cancellations = Repository.cancellations;
+            List<Cancellation> cancellations = CancellationDAO.findAll();
             if (cancellations.isEmpty()) {
                 ConsoleHelper.printError("등록된 해지 건이 없습니다.");
                 ConsoleHelper.waitEnter();
@@ -76,12 +78,12 @@ public class RefundListRunner {
     }
 
     private static String refundStatus(Cancellation cancellation) {
-        RefundCalculation refund = Repository.refundCalculations.stream()
+        RefundCalculation refund = RefundCalculationDAO.findAll().stream()
                 .filter(r -> r.getCancellation() == cancellation)
                 .findFirst().orElse(null);
         if (refund == null) return "산출 대기";
 
-        RefundPayment payment = Repository.refundPayments.stream()
+        RefundPayment payment = RefundPaymentDAO.findAll().stream()
                 .filter(p -> p.getRefund() == refund)
                 .findFirst().orElse(null);
         if (payment == null) return "산출 완료";
@@ -89,7 +91,7 @@ public class RefundListRunner {
     }
 
     private static RefundPayment findWaitingPayment(Cancellation cancellation) {
-        return Repository.refundPayments.stream()
+        return RefundPaymentDAO.findAll().stream()
                 .filter(p -> p.getRefund() != null
                         && p.getRefund().getCancellation() == cancellation
                         && p.getStatus() == RefundPaymentStatus.WAITING)
@@ -103,7 +105,7 @@ public class RefundListRunner {
         System.out.println("  고객명    : " + cancellation.getContract().getCustomer().getName());
         System.out.println("  진행 상태 : " + refundStatus(cancellation));
 
-        RefundCalculation refund = Repository.refundCalculations.stream()
+        RefundCalculation refund = RefundCalculationDAO.findAll().stream()
                 .filter(r -> r.getCancellation() == cancellation)
                 .findFirst().orElse(null);
         if (refund != null) {

@@ -2,8 +2,9 @@ package dp.runner.usecase;
 
 import dp.actor.Customer;
 import dp.consultation.Revival;
+import dp.dao.CustomerDAO;
+import dp.dao.RevivalDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 
 /**
@@ -98,7 +99,7 @@ public class RevivalRunner {
 
         // 10. 시스템은 부활 신청 완료 결과를 출력한다.
         revival.submit();
-        Repository.revivals.add(revival);
+        RevivalDAO.save(revival);
         ConsoleHelper.printStage("시스템", "부활 신청 완료 결과를 출력합니다.");
         ConsoleHelper.printInfo("신청번호: " + revival.getRevivalNumber()
                 + " | 신청일시: " + revival.getAppliedAt());
@@ -108,7 +109,7 @@ public class RevivalRunner {
     }
 
     private static Customer selectCustomer() {
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다.");
             return null;

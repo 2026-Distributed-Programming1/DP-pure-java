@@ -111,8 +111,10 @@ public class Contract {
     public void   setContractNo(String contractNo) { this.contractNo = contractNo; }
 
     public String getPolicyNo() { return policyNo; }
+    public void   setPolicyNo(String policyNo) { this.policyNo = policyNo; }
 
     public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer customer) { this.customer = customer; }
 
     public LocalDate getContractDate() { return contractDate; }
     public LocalDate getExpiryDate()   { return expiryDate; }

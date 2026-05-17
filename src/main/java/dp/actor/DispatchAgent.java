@@ -17,6 +17,14 @@ public class DispatchAgent extends Employee {
         this.vehicleNo = vehicleNo;
     }
 
+    /** DB 로딩용 생성자 */
+    public DispatchAgent(String employeeId, String name, String dept, String position,
+                         String region, String vehicleNo) {
+        super(employeeId, name, dept, position);
+        this.region = region;
+        this.vehicleNo = vehicleNo;
+    }
+
     // Getter
     public String getRegion() { return region; }
     public String getVehicleNo() { return vehicleNo; }

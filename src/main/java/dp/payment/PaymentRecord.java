@@ -42,6 +42,17 @@ public class PaymentRecord {
         this.status = PaymentRecordStatus.WAITING;
     }
 
+    /** DB 로딩용 생성자 */
+    public PaymentRecord(String recordNo, Contract contract, long amount, String method,
+                         LocalDate paymentDate, PaymentRecordStatus status) {
+        this.recordNo = recordNo;
+        this.contract = contract;
+        this.amount = amount;
+        this.method = method;
+        this.paymentDate = paymentDate;
+        this.status = status;
+    }
+
     /**
      * 상세 정보 로드
      * 시나리오상 화면 진입 시 데이터 로드 단계가 있으므로 메서드를 정의하지만,

@@ -1,0 +1,39 @@
+package dp.dao;
+
+import dp.consultation.PolicyApplication;
+import dp.db.DBA;
+import java.util.List;
+
+public class PolicyApplicationDAO {
+
+    public static void save(PolicyApplication p) {
+        String customerId = p.getCustomer() != null ? p.getCustomer().getCustomerId() : null;
+        DBA.executeUpdate(
+            "INSERT INTO policy_applications (application_no, customer_id, customer_name,"
+            + " product_name, period, payment_method, submitted_at)"
+            + " VALUES (?,?,?,?,?,?,?)"
+            + " ON DUPLICATE KEY UPDATE product_name=VALUES(product_name)",
+            p.getApplicationNumber(),
+            customerId,
+            p.getCustomerName(),
+            p.getProductName(),
+            p.getPeriod(),
+            p.getPaymentMethod(),
+            p.getSubmittedAt());
+    }
+
+    public static List<PolicyApplication> findAll() {
+        return DBA.executeQuery(
+            "SELECT application_no, customer_id, customer_name, product_name,"
+            + " period, payment_method FROM policy_applications",
+            rs -> {
+                PolicyApplication pa = new PolicyApplication();
+                pa.enterCustomerInfo(rs.getString("customer_name"), null, null, null);
+                pa.selectProduct(
+                    rs.getString("product_name"),
+                    rs.getInt("period"),
+                    rs.getString("payment_method"));
+                return pa;
+            });
+    }
+}

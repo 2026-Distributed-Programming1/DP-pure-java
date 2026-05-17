@@ -5,8 +5,11 @@ import dp.contract.Contract;
 import dp.enums.RefundStatus;
 import dp.payment.RefundCalculation;
 import dp.payment.RefundPayment;
+import dp.dao.CancellationDAO;
+import dp.dao.ContractDAO;
+import dp.dao.RefundCalculationDAO;
+import dp.dao.RefundPaymentDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +38,7 @@ public class RefundCalculationRunner {
 
         // 2) RefundCalculation 생성 (생성 시 자동 산출)
         RefundCalculation refund = new RefundCalculation(cancellation);
-        Repository.refundCalculations.add(refund);
+        RefundCalculationDAO.save(refund);
 
         // E1: 필수 데이터 누락 검증
         if (refund.getStatus() == RefundStatus.CALCULATION_PENDING) {
@@ -76,7 +79,7 @@ public class RefundCalculationRunner {
         ConsoleHelper.printDoubleDivider();
 
         RefundCalculation refund = new RefundCalculation(cancellation);
-        Repository.refundCalculations.add(refund);
+        RefundCalculationDAO.save(refund);
 
         if (refund.getStatus() == RefundStatus.CALCULATION_PENDING) {
             ConsoleHelper.printError("[E1] 환급금 산출에 필요한 데이터가 누락되었습니다.");
@@ -115,7 +118,7 @@ public class RefundCalculationRunner {
         }
         RefundPayment payment = refund.confirm();
         if (payment != null) {
-            Repository.refundPayments.add(payment);
+            RefundPaymentDAO.save(payment);
             ConsoleHelper.printSuccess("환급금 지급 이관 완료: " + payment.getPaymentNo());
         } else {
             ConsoleHelper.printError("[E2] 확정 저장에 실패했습니다.");
@@ -154,8 +157,9 @@ public class RefundCalculationRunner {
     /** 진행 중 RefundCalculation이 없는 해지 건이 있으면 그것을, 없으면 신규 생성 */
     private static Cancellation selectOrCreateCancellation() {
         // 환급 산출이 안 된 해지 건들
-        List<Cancellation> pending = Repository.cancellations.stream()
-                .filter(c -> Repository.refundCalculations.stream().noneMatch(r -> r.getCancellation() == c))
+        List<Cancellation> cancellations = CancellationDAO.findAll();
+        List<Cancellation> pending = cancellations.stream()
+                .filter(c -> RefundCalculationDAO.findAll().stream().noneMatch(r -> r.getCancellation() == c))
                 .collect(Collectors.toList());
 
         if (!pending.isEmpty()) {
@@ -168,21 +172,22 @@ public class RefundCalculationRunner {
 
         // 해지 건이 없으면 시연용으로 새 해지 생성
         ConsoleHelper.printInfo("산출 대상 해지 건이 없습니다. 시연용 해지 건을 생성합니다.");
-        if (Repository.contracts.isEmpty()) {
+        List<Contract> contracts = ContractDAO.findAll();
+        if (contracts.isEmpty()) {
             ConsoleHelper.printError("등록된 계약이 없습니다.");
             ConsoleHelper.waitEnter();
             return null;
         }
-        String[] options = Repository.contracts.stream()
+        String[] options = contracts.stream()
                 .map(c -> c.getContractNo() + " - " + c.getCustomer().getName()
                         + " (월 " + c.getMonthlyPremium() + "원)")
                 .toArray(String[]::new);
         int choice = ConsoleHelper.readMenuChoice("[시연용] 해지할 계약을 선택하세요:", options);
-        Contract contract = Repository.contracts.get(choice - 1);
+        Contract contract = contracts.get(choice - 1);
         Cancellation cancellation = new Cancellation(contract);
         cancellation.calculateExpectedRefund();
         cancellation.confirm();
-        Repository.cancellations.add(cancellation);
+        CancellationDAO.save(cancellation);
         ConsoleHelper.printSuccess("시연용 해지 건 생성: " + cancellation.getCancellationNo());
         return cancellation;
     }

@@ -5,8 +5,10 @@ import dp.actor.Employee;
 import dp.claim.ClaimCalculation;
 import dp.claim.ClaimPayment;
 import dp.enums.CalculationStatus;
+import dp.dao.ClaimCalculationDAO;
+import dp.dao.ClaimPaymentDAO;
+import dp.dao.ClaimsHandlerDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,7 +73,7 @@ public class ClaimCalculationRunner {
                 }
                 ClaimPayment payment = calc.approve();
                 if (payment != null) {
-                    Repository.claimPayments.add(payment);
+                    ClaimPaymentDAO.save(payment);
                     ConsoleHelper.printSuccess("지급 승인 완료, 지급번호: " + payment.getPaymentNo());
                 }
                 ConsoleHelper.waitEnter();
@@ -122,7 +124,7 @@ public class ClaimCalculationRunner {
                 }
                 ClaimPayment payment = calc.approve();
                 if (payment != null) {
-                    Repository.claimPayments.add(payment);
+                    ClaimPaymentDAO.save(payment);
                     ConsoleHelper.printSuccess("지급 승인 완료, 지급번호: " + payment.getPaymentNo());
                     ConsoleHelper.printInfo("→ 보험금 지급 단계로 이관합니다.");
                     ClaimPaymentRunner.run(payment);
@@ -140,7 +142,7 @@ public class ClaimCalculationRunner {
     private static void handleApprovalChained(ClaimCalculation calc, ClaimsHandler current) {
         ConsoleHelper.printStage("보상담당자", "[A1] 결재 상신을 진행합니다.");
 
-        List<ClaimsHandler> approvers = Repository.claimsHandlers.stream()
+        List<ClaimsHandler> approvers = ClaimsHandlerDAO.findAll().stream()
                 .filter(h -> h != current && h.getTransferLimit() >= calc.getFinalAmount())
                 .collect(Collectors.toList());
         if (approvers.isEmpty()) {
@@ -160,7 +162,7 @@ public class ClaimCalculationRunner {
         if (ConsoleHelper.readYesNo("  결재권자가 승인했다고 가정하고 지급 이관을 진행할까요?")) {
             ClaimPayment payment = calc.approve();
             if (payment != null) {
-                Repository.claimPayments.add(payment);
+                ClaimPaymentDAO.save(payment);
                 ConsoleHelper.printSuccess("지급 승인 및 이관 완료, 지급번호: " + payment.getPaymentNo());
                 ConsoleHelper.printInfo("→ 보험금 지급 단계로 이관합니다.");
                 ClaimPaymentRunner.run(payment);
@@ -173,7 +175,7 @@ public class ClaimCalculationRunner {
         ConsoleHelper.printStage("보상담당자", "[A1] 결재 상신을 진행합니다.");
 
         // 전결 한도가 더 큰 다른 보상담당자를 결재선으로
-        List<ClaimsHandler> approvers = Repository.claimsHandlers.stream()
+        List<ClaimsHandler> approvers = ClaimsHandlerDAO.findAll().stream()
                 .filter(h -> h != current && h.getTransferLimit() >= calc.getFinalAmount())
                 .collect(Collectors.toList());
         if (approvers.isEmpty()) {
@@ -194,7 +196,7 @@ public class ClaimCalculationRunner {
         if (ConsoleHelper.readYesNo("  결재권자가 승인했다고 가정하고 지급 이관을 진행할까요?")) {
             ClaimPayment payment = calc.approve();
             if (payment != null) {
-                Repository.claimPayments.add(payment);
+                ClaimPaymentDAO.save(payment);
                 ConsoleHelper.printSuccess("지급 승인 및 이관 완료, 지급번호: " + payment.getPaymentNo());
             }
         }
@@ -215,7 +217,7 @@ public class ClaimCalculationRunner {
     }
 
     private static ClaimsHandler selectHandler() {
-        List<ClaimsHandler> handlers = Repository.claimsHandlers;
+        List<ClaimsHandler> handlers = ClaimsHandlerDAO.findAll();
         if (handlers.isEmpty()) {
             ConsoleHelper.printError("등록된 보상담당자가 없습니다.");
             return null;
@@ -228,7 +230,7 @@ public class ClaimCalculationRunner {
     }
 
     private static ClaimCalculation selectCalculation() {
-        List<ClaimCalculation> available = Repository.calculations.stream()
+        List<ClaimCalculation> available = ClaimCalculationDAO.findAll().stream()
                 .filter(c -> c.getStatus() == CalculationStatus.CALCULATED
                         || c.getStatus() == CalculationStatus.APPROVAL_PENDING)
                 .collect(Collectors.toList());

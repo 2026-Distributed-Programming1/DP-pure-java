@@ -11,4 +11,9 @@ public class FinanceManager extends Employee {
     public FinanceManager(String name, String dept, String position) {
         super(name, dept, position);
     }
+
+    /** DB 로딩용 생성자 */
+    public FinanceManager(String employeeId, String name, String dept, String position) {
+        super(employeeId, name, dept, position);
+    }
 }

@@ -54,6 +54,16 @@ public class ClaimRequest {
         this.status = ClaimRequestStatus.DRAFT;
     }
 
+    /** DB 로딩용 생성자 */
+    public ClaimRequest(String claimNo, Customer customer, Contract contract, ClaimRequestStatus status) {
+        this.claimNo = claimNo;
+        this.customer = customer;
+        this.contract = contract;
+        this.status = status;
+        this.claimReasons = new ArrayList<>();
+        this.attachments = new ArrayList<>();
+    }
+
     /** 개인정보 동의 */
     public void agreePersonalInfoTerms() {
         this.personalInfoAgreed = true;

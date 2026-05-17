@@ -1,8 +1,8 @@
 package dp.runner.usecase;
 
+import dp.dao.SalesActivityManagementDAO;
 import dp.enums.ChannelType;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import dp.sales.SalesActivityManagement;
 
 import java.time.LocalDate;
@@ -183,7 +183,7 @@ public class SalesActivityRunner {
 
         // 10. 시스템은 "개선 지시가 등록되었습니다." 팝업과 등록 완료 결과를 출력한다. (E1)
         activity.showSaveSuccess();
-        Repository.salesActivityManagements.add(activity);
+        SalesActivityManagementDAO.save(activity);
         ConsoleHelper.printStage("시스템", "개선 지시가 등록되었습니다.");
         ConsoleHelper.printStage("시스템", "등록 완료 결과를 출력합니다.");
         ConsoleHelper.printInfo("관리번호: " + activity.getManagementNo()

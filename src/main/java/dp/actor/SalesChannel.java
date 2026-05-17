@@ -33,4 +33,5 @@ public class SalesChannel {
     }
 
     public String getName() { return channelName; }
+    public String getChannelId() { return channelId; }
 }

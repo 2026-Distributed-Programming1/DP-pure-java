@@ -4,8 +4,12 @@ import dp.actor.Customer;
 import dp.actor.Designer;
 import dp.consultation.InsuranceProduct;
 import dp.consultation.PolicyApplication;
+import dp.dao.CustomerDAO;
+import dp.dao.DesignerDAO;
+import dp.dao.InsuranceProductDAO;
+import dp.dao.InsuranceReviewerDAO;
+import dp.dao.PolicyApplicationDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 
 /**
@@ -37,10 +41,10 @@ public class PolicyApplicationRunner {
         System.out.println("UC: 청약서를 작성한다");
         ConsoleHelper.printDoubleDivider();
 
-        Designer designer = Repository.designers.get(0);
+        Designer designer = DesignerDAO.findAll().get(0);
 
         // 고객 선택 (시스템에 등록된 고객 중 선택)
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다. 먼저 고객을 등록해 주세요.");
             ConsoleHelper.waitEnter();
@@ -67,7 +71,7 @@ public class PolicyApplicationRunner {
 
         // 4. 시스템은 가입 가능한 상품 목록을 출력한다.
         ConsoleHelper.printStage("시스템", "가입 가능한 보험상품 목록을 출력합니다.");
-        List<InsuranceProduct> products = Repository.insuranceProducts;
+        List<InsuranceProduct> products = InsuranceProductDAO.findAll();
         for (int i = 0; i < products.size(); i++) {
             ConsoleHelper.printInfo("[" + (i + 1) + "] " + products.get(i).getProductName()
                     + " | 월 " + products.get(i).getMonthlyPremium() + "원");
@@ -110,12 +114,12 @@ public class PolicyApplicationRunner {
         boolean submit = ConsoleHelper.readYesNo("[판매채널] 청약서를 최종 제출하시겠습니까?");
         if (submit) {
             application.submit();
-            Repository.policyApplications.add(application);
+            PolicyApplicationDAO.save(application);
             // 10. 시스템은 제출 완료 결과를 출력한다.
             ConsoleHelper.printStage("시스템", "제출 완료 결과를 출력합니다.");
             ConsoleHelper.printInfo("청약번호: " + application.getApplicationNumber()
                     + " | 제출일시: " + application.getSubmittedAt()
-                    + " | 담당 심사자: " + Repository.insuranceReviewers.get(0).getName());
+                    + " | 담당 심사자: " + InsuranceReviewerDAO.findAll().get(0).getName());
         }
 
         ConsoleHelper.waitEnter();

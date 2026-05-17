@@ -6,8 +6,11 @@ import dp.claim.ClaimRequest;
 import dp.claim.DamageInvestigation;
 import dp.enums.InvestigationResult;
 import dp.enums.InvestigationStatus;
+import dp.dao.ClaimCalculationDAO;
+import dp.dao.ClaimRequestDAO;
+import dp.dao.ClaimsHandlerDAO;
+import dp.dao.DamageInvestigationDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -115,7 +118,7 @@ public class DamageInvestigationRunner {
         if (inv.getResult() == InvestigationResult.APPROVED) {
             ClaimCalculation calc = inv.complete();
             if (calc != null) {
-                Repository.calculations.add(calc);
+                ClaimCalculationDAO.save(calc);
                 ConsoleHelper.printSuccess("조사 완료, 보험금 산출로 이관: " + calc.getCalculationNo());
                 ConsoleHelper.printInfo("→ 보험금 산출 단계로 이관합니다.");
                 ClaimCalculationRunner.run(handler, calc);
@@ -183,7 +186,7 @@ public class DamageInvestigationRunner {
     }
 
     private static ClaimsHandler selectHandler() {
-        List<ClaimsHandler> handlers = Repository.claimsHandlers;
+        List<ClaimsHandler> handlers = ClaimsHandlerDAO.findAll();
         if (handlers.isEmpty()) {
             ConsoleHelper.printError("등록된 보상담당자가 없습니다.");
             return null;
@@ -198,14 +201,15 @@ public class DamageInvestigationRunner {
     /** 새 조사를 시작하거나 진행 중 조사를 이어서 처리 */
     private static DamageInvestigation selectOrCreateInvestigation(ClaimsHandler handler) {
         // 진행 중 조사
-        List<DamageInvestigation> ongoing = Repository.investigations.stream()
+        List<DamageInvestigation> allInvestigations = DamageInvestigationDAO.findAll();
+        List<DamageInvestigation> ongoing = allInvestigations.stream()
                 .filter(i -> i.getStatus() == InvestigationStatus.NEW_ASSIGNED
                         || i.getStatus() == InvestigationStatus.INVESTIGATING)
                 .collect(Collectors.toList());
 
         // 조사가 시작되지 않은 청구 건
-        List<ClaimRequest> pendingClaims = Repository.claimRequests.stream()
-                .filter(c -> Repository.investigations.stream().noneMatch(i -> i.getClaim() == c))
+        List<ClaimRequest> pendingClaims = ClaimRequestDAO.findAll().stream()
+                .filter(c -> allInvestigations.stream().noneMatch(i -> i.getClaim() == c))
                 .collect(Collectors.toList());
 
         if (ongoing.isEmpty() && pendingClaims.isEmpty()) {
@@ -231,7 +235,7 @@ public class DamageInvestigationRunner {
             ClaimRequest claim = pendingClaims.get(choice - 1 - ongoing.size());
             DamageInvestigation inv = new DamageInvestigation(claim);
             inv.assignHandler(handler);
-            Repository.investigations.add(inv);
+            DamageInvestigationDAO.save(inv);
             ConsoleHelper.printSuccess("새 조사 건이 생성되어 " + handler.getName() + "에게 배정되었습니다.");
             return inv;
         }

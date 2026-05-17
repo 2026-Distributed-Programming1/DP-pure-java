@@ -45,6 +45,20 @@ public class ClaimCalculation {
         calculate();
     }
 
+    /** DB 로딩용 생성자 - 자동 산출 없이 필드 직접 설정 */
+    public ClaimCalculation(String calculationNo, DamageInvestigation investigation,
+                            long recognizedDamage, double faultRatio, long finalAmount,
+                            boolean exceededDeductible, boolean adjusted, CalculationStatus status) {
+        this.calculationNo = calculationNo;
+        this.investigation = investigation;
+        this.recognizedDamage = recognizedDamage;
+        this.faultRatio = faultRatio;
+        this.finalAmount = finalAmount;
+        this.exceededDeductible = exceededDeductible;
+        this.adjusted = adjusted;
+        this.status = status;
+    }
+
     /** 손해액·과실비율·약관 자동 로드 */
     public void loadCalculationData() {
         if (this.investigation != null) {

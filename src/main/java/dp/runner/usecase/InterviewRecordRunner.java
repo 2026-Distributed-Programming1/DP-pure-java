@@ -1,8 +1,9 @@
 package dp.runner.usecase;
 
 import dp.consultation.InterviewRecord;
+import dp.dao.InterviewRecordDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
+import java.util.List;
 
 /**
  * UC: 면담기록을 관리한다 시나리오 진행자
@@ -36,9 +37,10 @@ public class InterviewRecordRunner {
 
         // 2. 시스템은 면담기록 관리 화면을 출력한다.
         ConsoleHelper.printStage("시스템", "면담기록 관리 화면을 출력합니다.");
-        if (!Repository.interviewRecords.isEmpty()) {
+        List<InterviewRecord> interviewRecords = InterviewRecordDAO.findAll();
+        if (!interviewRecords.isEmpty()) {
             ConsoleHelper.printInfo("면담기록 목록 (고객명 / 면담일시):");
-            for (InterviewRecord r : Repository.interviewRecords) {
+            for (InterviewRecord r : interviewRecords) {
                 ConsoleHelper.printInfo("[" + r.getRecordNumber() + "] "
                         + r.getCustomerName()
                         + " | " + r.getInterviewedAt());
@@ -78,7 +80,7 @@ public class InterviewRecordRunner {
             }
 
             record.save(content, reaction, followUp);
-            Repository.interviewRecords.add(record);
+            InterviewRecordDAO.save(record);
 
             // 5. 시스템은 저장 완료 결과를 출력한다.
             ConsoleHelper.printStage("시스템", "면담 기록 저장 완료 결과를 출력합니다.");
@@ -95,15 +97,14 @@ public class InterviewRecordRunner {
 
         } else {
             // A3) [수정] 버튼을 클릭한 경우
-            if (Repository.interviewRecords.isEmpty()) {
+            if (interviewRecords.isEmpty()) {
                 // A2) 면담기록이 없는 경우
                 ConsoleHelper.printError("[A2] 조회된 면담 기록이 없습니다.");
                 ConsoleHelper.waitEnter();
                 return;
             }
             ConsoleHelper.printStage("시스템", "면담 기록을 편집 가능한 상태로 출력합니다.");
-            InterviewRecord record = Repository.interviewRecords.get(
-                    Repository.interviewRecords.size() - 1);
+            InterviewRecord record = interviewRecords.get(interviewRecords.size() - 1);
 
             String content = ConsoleHelper.readNonEmpty("  수정할 면담 내용: ");
             String reaction = ConsoleHelper.readNonEmpty("  고객 반응: ");

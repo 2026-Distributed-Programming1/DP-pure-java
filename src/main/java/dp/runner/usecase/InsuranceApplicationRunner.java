@@ -3,8 +3,10 @@ package dp.runner.usecase;
 import dp.actor.Customer;
 import dp.consultation.InsuranceApplication;
 import dp.consultation.InsuranceProduct;
+import dp.dao.CustomerDAO;
+import dp.dao.InsuranceApplicationDAO;
+import dp.dao.InsuranceProductDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class InsuranceApplicationRunner {
         ConsoleHelper.printStage("시스템", "보험 신청 화면을 출력합니다.");
         ConsoleHelper.printInfo("입력 항목: 개인정보 / 보장내용 / 특약 선택 / 납입방법");
 
-        List<InsuranceProduct> products = Repository.insuranceProducts;
+        List<InsuranceProduct> products = InsuranceProductDAO.findAll();
         if (products.isEmpty()) {
             ConsoleHelper.printError("등록된 보험상품이 없습니다.");
             ConsoleHelper.waitEnter();
@@ -116,7 +118,7 @@ public class InsuranceApplicationRunner {
 
         // 10. 시스템은 신청 완료 결과를 출력한다.
         application.apply();
-        Repository.insuranceApplications.add(application);
+        InsuranceApplicationDAO.save(application);
         ConsoleHelper.printStage("시스템", "신청 완료 결과를 출력합니다.");
         ConsoleHelper.printInfo("신청번호: " + application.getApplicationNumber()
                 + " | 신청일시: " + application.getAppliedAt());
@@ -126,7 +128,7 @@ public class InsuranceApplicationRunner {
     }
 
     private static Customer selectCustomer() {
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다.");
             return null;

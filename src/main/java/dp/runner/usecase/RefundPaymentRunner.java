@@ -3,8 +3,8 @@ package dp.runner.usecase;
 import dp.common.BankAccount;
 import dp.enums.RefundPaymentStatus;
 import dp.payment.RefundPayment;
+import dp.dao.RefundPaymentDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -193,7 +193,7 @@ public class RefundPaymentRunner {
     }
 
     private static RefundPayment selectPayment() {
-        List<RefundPayment> available = Repository.refundPayments.stream()
+        List<RefundPayment> available = RefundPaymentDAO.findAll().stream()
                 .filter(p -> p.getStatus() == RefundPaymentStatus.WAITING)
                 .collect(Collectors.toList());
         if (available.isEmpty()) {

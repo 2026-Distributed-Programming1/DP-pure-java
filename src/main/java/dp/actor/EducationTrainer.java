@@ -13,6 +13,11 @@ public class EducationTrainer extends Employee {
         super(name, contact, email);
     }
 
+    /** DB 로딩용 생성자 */
+    public EducationTrainer(String employeeId, String name, String dept, String position) {
+        super(employeeId, name, dept, position);
+    }
+
     public EducationPlan createEducationPlan() {
         return new EducationPlan();
     }

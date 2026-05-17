@@ -10,8 +10,10 @@ import dp.enums.AccidentSubType;
 import dp.enums.AuthMethod;
 import dp.enums.ClaimType;
 import dp.enums.NoticeMethod;
+import dp.dao.ClaimRequestDAO;
+import dp.dao.ContractDAO;
+import dp.dao.CustomerDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
@@ -144,7 +146,7 @@ public class ClaimRequestRunner {
             return;
         }
         claim.submit();
-        Repository.claimRequests.add(claim);
+        ClaimRequestDAO.save(claim);
         ConsoleHelper.printSuccess("청구번호: " + claim.getClaimNo());
 
         ConsoleHelper.waitEnter();
@@ -192,7 +194,7 @@ public class ClaimRequestRunner {
     }
 
     private static Customer selectCustomer() {
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다.");
             return null;
@@ -205,9 +207,7 @@ public class ClaimRequestRunner {
     }
 
     private static Contract selectContract(Customer customer) {
-        List<Contract> contracts = Repository.contracts.stream()
-                .filter(c -> c.getCustomer() == customer)
-                .collect(Collectors.toList());
+        List<Contract> contracts = ContractDAO.findByCustomerId(customer.getCustomerId());
         if (contracts.isEmpty()) {
             ConsoleHelper.printError("해당 고객의 보험 계약이 없습니다.");
             ConsoleHelper.waitEnter();

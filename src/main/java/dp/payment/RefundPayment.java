@@ -29,6 +29,15 @@ public class RefundPayment {
     private String noticeFailureMessage;        // 알림톡 발송 실패 메시지 (E3)
     private RefundPaymentStatus status;         // 상태
 
+    /** DB 로딩용 생성자 - 자동 로드 없이 필드 직접 설정 */
+    public RefundPayment(String paymentNo, RefundCalculation refund,
+                         long finalAmount, RefundPaymentStatus status) {
+        this.paymentNo = paymentNo;
+        this.refund = refund;
+        this.finalAmount = finalAmount;
+        this.status = status;
+    }
+
     /** 생성자 - 지급번호 자동 부여, 계좌·금액 자동 로드 */
     public RefundPayment(RefundCalculation refund) {
         sequence += 1;

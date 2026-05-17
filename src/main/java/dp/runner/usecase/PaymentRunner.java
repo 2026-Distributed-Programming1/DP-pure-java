@@ -7,8 +7,11 @@ import dp.enums.PaymentMethod;
 import dp.payment.Payment;
 import dp.payment.PaymentItem;
 import dp.payment.PaymentRecord;
+import dp.dao.ContractDAO;
+import dp.dao.CustomerDAO;
+import dp.dao.PaymentDAO;
+import dp.dao.PaymentRecordDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,7 +85,7 @@ public class PaymentRunner {
 
         // 7) 신청
         payment.submit();
-        Repository.payments.add(payment);
+        PaymentDAO.save(payment);
 
         // 8) 결제가 발생했으므로 PaymentRecord(납부 내역)를 생성하여 시스템에 등록
         ConsoleHelper.printStage("시스템", "결제가 발생하여 납부 내역을 시스템에 등록합니다.");
@@ -91,7 +94,7 @@ public class PaymentRunner {
                     item.getContract(),
                     item.getSubtotal(),
                     method.name());
-            Repository.paymentRecords.add(record);
+            PaymentRecordDAO.save(record);
             ConsoleHelper.printInfo("  납부 내역 생성: " + record.getRecordNo()
                     + " (계약 " + item.getContract().getContractNo()
                     + ", 금액 " + item.getSubtotal() + "원)");
@@ -149,7 +152,7 @@ public class PaymentRunner {
         }
 
         payment.submit();
-        Repository.payments.add(payment);
+        PaymentDAO.save(payment);
 
         ConsoleHelper.printStage("시스템", "결제가 발생하여 납부 내역을 시스템에 등록합니다.");
         for (PaymentItem item : payment.getItems()) {
@@ -157,7 +160,7 @@ public class PaymentRunner {
                     item.getContract(),
                     item.getSubtotal(),
                     method.name());
-            Repository.paymentRecords.add(record);
+            PaymentRecordDAO.save(record);
             ConsoleHelper.printInfo("  납부 내역 생성: " + record.getRecordNo()
                     + " (계약 " + item.getContract().getContractNo()
                     + ", 금액 " + item.getSubtotal() + "원)");
@@ -204,7 +207,7 @@ public class PaymentRunner {
     }
 
     private static Customer selectCustomer() {
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다.");
             return null;
@@ -217,9 +220,7 @@ public class PaymentRunner {
     }
 
     private static List<Contract> selectContracts(Customer customer) {
-        List<Contract> contracts = Repository.contracts.stream()
-                .filter(c -> c.getCustomer() == customer)
-                .collect(Collectors.toList());
+        List<Contract> contracts = ContractDAO.findByCustomerId(customer.getCustomerId());
         if (contracts.isEmpty()) {
             ConsoleHelper.printError("해당 고객의 보험 계약이 없습니다.");
             ConsoleHelper.waitEnter();
