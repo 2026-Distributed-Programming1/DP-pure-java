@@ -1,9 +1,10 @@
 package dp.runner.usecase;
 
 import dp.consultation.InterviewSchedule;
+import dp.dao.InterviewScheduleDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * UC: 면담일정을 관리한다 시나리오 진행자
@@ -39,9 +40,10 @@ public class InterviewScheduleRunner {
 
         // 2. 시스템은 면담일정 관리 화면을 출력한다.
         ConsoleHelper.printStage("시스템", "면담일정 관리 화면을 출력합니다.");
-        if (!Repository.interviewSchedules.isEmpty()) {
+        List<InterviewSchedule> interviewSchedules = InterviewScheduleDAO.findAll();
+        if (!interviewSchedules.isEmpty()) {
             ConsoleHelper.printInfo("면담 목록 (고객명 / 유형 / 상태):");
-            for (InterviewSchedule s : Repository.interviewSchedules) {
+            for (InterviewSchedule s : interviewSchedules) {
                 ConsoleHelper.printInfo("[" + s.getInterviewNumber() + "] "
                         + s.getCustomerName()
                         + " | " + s.getType()
@@ -96,7 +98,7 @@ public class InterviewScheduleRunner {
             }
 
             schedule.register(customerName, scheduledAt, location, preparation);
-            Repository.interviewSchedules.add(schedule);
+            InterviewScheduleDAO.save(schedule);
 
             // 5. 시스템은 등록 완료 결과를 출력한다.
             ConsoleHelper.printStage("시스템", "면담 등록 완료 결과를 출력합니다.");
@@ -112,14 +114,13 @@ public class InterviewScheduleRunner {
 
         } else if (action == 2) {
             // A4) [수정] 버튼을 클릭한 경우
-            if (Repository.interviewSchedules.isEmpty()) {
+            if (interviewSchedules.isEmpty()) {
                 ConsoleHelper.printError("수정할 면담 일정이 없습니다.");
                 ConsoleHelper.waitEnter();
                 return;
             }
             ConsoleHelper.printStage("시스템", "면담 정보를 편집 가능한 상태로 출력합니다.");
-            InterviewSchedule schedule = Repository.interviewSchedules.get(
-                    Repository.interviewSchedules.size() - 1);
+            InterviewSchedule schedule = interviewSchedules.get(interviewSchedules.size() - 1);
 
             LocalDateTime scheduledAt = ConsoleHelper.readDateTime("  변경할 면담일시");
             String location = ConsoleHelper.readNonEmpty("  변경할 장소: ");
@@ -139,7 +140,7 @@ public class InterviewScheduleRunner {
 
         } else if (action == 3) {
             // A5) [취소] 버튼을 클릭한 경우
-            if (Repository.interviewSchedules.isEmpty()) {
+            if (interviewSchedules.isEmpty()) {
                 ConsoleHelper.printError("취소할 면담 일정이 없습니다.");
                 ConsoleHelper.waitEnter();
                 return;
@@ -147,8 +148,7 @@ public class InterviewScheduleRunner {
             ConsoleHelper.printStage("시스템", "해당 면담을 취소하시겠습니까?");
             boolean confirm = ConsoleHelper.readYesNo("  확인");
             if (confirm) {
-                InterviewSchedule schedule = Repository.interviewSchedules.get(
-                        Repository.interviewSchedules.size() - 1);
+                InterviewSchedule schedule = interviewSchedules.get(interviewSchedules.size() - 1);
                 schedule.cancel();
                 ConsoleHelper.printStage("시스템", "취소 완료 결과를 출력합니다.");
                 ConsoleHelper.printInfo("면담번호: " + schedule.getInterviewNumber()

@@ -39,6 +39,18 @@ public class DamageInvestigation {
         this.status = InvestigationStatus.NEW_ASSIGNED;
     }
 
+    /** DB 로딩용 생성자 */
+    public DamageInvestigation(String investigationNo, ClaimRequest claim, String handlerName,
+                               double ourFaultRatio, double counterFaultRatio,
+                               long recognizedDamage, InvestigationStatus status) {
+        this.investigationNo = investigationNo;
+        this.claim = claim;
+        this.ourFaultRatio = ourFaultRatio;
+        this.counterFaultRatio = counterFaultRatio;
+        this.recognizedDamage = recognizedDamage;
+        this.status = status;
+    }
+
     /** 담당자 배정 - status="조사중" */
     public void assignHandler(ClaimsHandler handler) {
         this.handler = handler;

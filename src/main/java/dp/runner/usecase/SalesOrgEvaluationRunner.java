@@ -1,9 +1,9 @@
 package dp.runner.usecase;
 
+import dp.dao.SalesOrgEvaluationDAO;
 import dp.enums.ChannelType;
 import dp.enums.EvaluationGrade;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import dp.sales.SalesOrgEvaluation;
 
 import java.time.LocalDate;
@@ -199,7 +199,7 @@ public class SalesOrgEvaluationRunner {
 
         // 저장 처리
         evaluation.saveEvaluation();
-        Repository.salesOrgEvaluations.add(evaluation);
+        SalesOrgEvaluationDAO.save(evaluation);
 
         // 10. 시스템은 평가 등록 완료 결과를 출력한다.
         evaluation.showEvaluationResult();

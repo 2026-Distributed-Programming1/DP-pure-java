@@ -1,8 +1,8 @@
 package dp.runner.usecase;
 
 import dp.contract.ContractStatistics;
+import dp.dao.ContractStatisticsDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 
 import java.time.YearMonth;
 
@@ -130,7 +130,7 @@ public class ContractStatisticsRunner {
 
         // 6. 시스템은 통계 데이터를 엑셀 파일로 생성하여 다운로드한다.
         statistics.exportToExcel();
-        Repository.contractStatisticsList.add(statistics);
+        ContractStatisticsDAO.save(statistics);
         ConsoleHelper.printStage("시스템", "통계 데이터를 엑셀 파일로 생성하여 다운로드합니다.");
         ConsoleHelper.printInfo("파일명: " + statistics.getFileName());
 

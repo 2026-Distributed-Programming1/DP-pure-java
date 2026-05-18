@@ -3,8 +3,8 @@ package dp.runner.usecase;
 import dp.contract.Cancellation;
 import dp.contract.Contract;
 import dp.enums.ContractStatus;
+import dp.dao.CancellationDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 
 /**
  * 「보험을 해지한다」 시나리오 진행자
@@ -132,7 +132,7 @@ public class InsuranceCancellationRunner {
         // Step 8: 해약 완료
         cancellation.submit();
         contract.setStatus(ContractStatus.CANCELLED);
-        Repository.cancellations.add(cancellation);
+        CancellationDAO.save(cancellation);
         ConsoleHelper.printSuccess("[시스템] 보험 해약이 완료되었습니다. 환급금은 추후 별도 안내 드리겠습니다.");
         ConsoleHelper.waitEnter();
 

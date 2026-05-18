@@ -3,8 +3,10 @@ package dp.runner.usecase;
 import dp.actor.Customer;
 import dp.actor.Designer;
 import dp.consultation.ConsultationRequest;
+import dp.dao.ConsultationRequestDAO;
+import dp.dao.CustomerDAO;
+import dp.dao.DesignerDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -75,7 +77,7 @@ public class ConsultationRequestRunner {
 
         // 5. 고객은 [신청] 버튼을 클릭한다.
         request.submit();
-        Repository.consultationRequests.add(request);
+        ConsultationRequestDAO.save(request);
 
         // 6. 시스템은 상담 신청 접수 결과를 출력한다.
         ConsoleHelper.printStage("시스템", "상담 신청 접수 결과를 출력합니다.");
@@ -84,7 +86,7 @@ public class ConsultationRequestRunner {
                 + " | 상태: " + request.getStatus());
 
         // 7~8. 판매채널은 신규 상담 신청 알림을 확인한다.
-        Designer designer = Repository.designers.get(0);
+        Designer designer = DesignerDAO.findAll().get(0);
         ConsoleHelper.printStage("시스템", "판매채널(" + designer.getName() + ")에게 신규 상담 신청 알림을 발송합니다.");
         ConsoleHelper.printInfo("고객명: " + customer.getName()
                 + " | 상담유형: " + request.getType()
@@ -102,7 +104,7 @@ public class ConsultationRequestRunner {
     }
 
     private static Customer selectCustomer() {
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다.");
             return null;

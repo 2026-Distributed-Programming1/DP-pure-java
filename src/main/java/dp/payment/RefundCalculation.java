@@ -38,6 +38,24 @@ public class RefundCalculation {
     private LocalDateTime calculatedAt;             // 산출일시
     private LocalDateTime confirmedAt;              // 확정일시
 
+    /** DB 로딩용 생성자 - 자동 산출 없이 필드 직접 설정 */
+    public RefundCalculation(String refundNo, Cancellation cancellation,
+                             long totalPaidPremium, String paymentPeriod, long reserveAmount,
+                             double appliedRate, long baseRefund, long unpaidPremium,
+                             long finalRefund, RefundStatus status) {
+        this.refundNo = refundNo;
+        this.cancellation = cancellation;
+        this.totalPaidPremium = totalPaidPremium;
+        this.paymentPeriod = paymentPeriod;
+        this.reserveAmount = reserveAmount;
+        this.appliedRate = appliedRate;
+        this.baseRefund = baseRefund;
+        this.unpaidPremium = unpaidPremium;
+        this.finalRefund = finalRefund;
+        this.status = status;
+        this.adjustments = new ArrayList<>();
+    }
+
     /** 생성자 - 환급 접수번호 자동 부여, 데이터 자동 로드 후 calculate() 호출 */
     public RefundCalculation(Cancellation cancellation) {
         sequence += 1;

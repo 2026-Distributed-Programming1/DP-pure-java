@@ -3,8 +3,10 @@ package dp.runner.usecase;
 import dp.actor.Customer;
 import dp.consultation.InsuranceProduct;
 import dp.consultation.Proposal;
+import dp.dao.CustomerDAO;
+import dp.dao.InsuranceProductDAO;
+import dp.dao.ProposalDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 
 /**
@@ -42,7 +44,7 @@ public class ProposalRunner {
         ConsoleHelper.printStage("시스템", "보험상품 제안 화면을 출력합니다.");
         ConsoleHelper.printInfo("고객명: " + customer.getName() + " | 연락처: " + customer.getContact());
 
-        List<InsuranceProduct> products = Repository.insuranceProducts;
+        List<InsuranceProduct> products = InsuranceProductDAO.findAll();
         if (products.isEmpty()) {
             ConsoleHelper.printError("조회 가능한 보험상품이 없습니다.");
             ConsoleHelper.waitEnter();
@@ -91,7 +93,7 @@ public class ProposalRunner {
         if (send) {
             // 6. 시스템은 고객에게 보험상품 제안서를 발송한다.
             proposal.send();
-            Repository.proposals.add(proposal);
+            ProposalDAO.save(proposal);
             ConsoleHelper.printStage("시스템", "제안서 발송 완료 결과를 출력합니다.");
             ConsoleHelper.printInfo("제안번호: " + proposal.getProposalId()
                     + " | 수신고객명: " + proposal.getCustomerName());
@@ -103,7 +105,7 @@ public class ProposalRunner {
     }
 
     private static Customer selectCustomer() {
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다.");
             return null;

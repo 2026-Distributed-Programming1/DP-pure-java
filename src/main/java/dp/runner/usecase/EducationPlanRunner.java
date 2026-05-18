@@ -3,8 +3,10 @@ package dp.runner.usecase;
 import dp.actor.EducationTrainer;
 import dp.actor.SalesManager;
 import dp.education.EducationPlan;
+import dp.dao.EducationPlanDAO;
+import dp.dao.EducationTrainerDAO;
+import dp.dao.SalesManagerDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.time.LocalDate;
 
 /**
@@ -38,8 +40,8 @@ public class EducationPlanRunner {
         System.out.println("UC: 교육 계획안을 작성한다");
         ConsoleHelper.printDoubleDivider();
 
-        EducationTrainer trainer = Repository.educationTrainers.get(0);
-        SalesManager manager = Repository.salesManagers.get(0);
+        EducationTrainer trainer = EducationTrainerDAO.findAll().get(0);
+        SalesManager manager = SalesManagerDAO.findAll().get(0);
 
         // 2. 시스템은 교육 계획 작성 화면을 출력한다.
         ConsoleHelper.printStage("시스템", "교육계획안 작성 화면을 출력합니다.");
@@ -74,7 +76,7 @@ public class EducationPlanRunner {
         if (action == 2) {
             // A1) [임시저장] 버튼을 클릭한 경우
             plan.tempSave();
-            Repository.educationPlans.add(plan);
+            EducationPlanDAO.save(plan);
             ConsoleHelper.printSuccess("[A1] 임시저장되었습니다. 계획번호: " + plan.getPlanNumber());
             ConsoleHelper.waitEnter();
             return;
@@ -97,7 +99,7 @@ public class EducationPlanRunner {
 
         // 8. 시스템은 영업 관리자에게 승인 요청 알림을 자동 발송한다.
         plan.requestApproval();
-        Repository.educationPlans.add(plan);
+        EducationPlanDAO.save(plan);
         ConsoleHelper.printStage("시스템", "영업 관리자에게 승인 요청 알림을 발송합니다.");
         ConsoleHelper.printInfo("교육명: " + plan.getEducationName()
                 + " | 채널유형: " + plan.getChannelType()
@@ -112,6 +114,7 @@ public class EducationPlanRunner {
 
         if (approveChoice == 1) {
             manager.approveEducationPlan(plan);
+            EducationPlanDAO.save(plan);
             // 10. 시스템은 승인 완료 결과를 출력한다.
             ConsoleHelper.printStage("시스템", "승인 완료 결과를 출력합니다.");
             ConsoleHelper.printInfo("계획번호: " + plan.getPlanNumber()

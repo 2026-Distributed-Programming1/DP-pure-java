@@ -4,8 +4,10 @@ import dp.actor.Customer;
 import dp.contract.Contract;
 import dp.enums.ContractStatus;
 import dp.payment.PaymentRecord;
+import dp.dao.ContractDAO;
+import dp.dao.CustomerDAO;
+import dp.dao.PaymentRecordDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,9 +49,7 @@ public class MyInsuranceViewRunner {
     static void run(Customer customer) {
         while (true) {
             // Basic Path 2: 전체 보험 목록
-            List<Contract> contracts = Repository.contracts.stream()
-                    .filter(c -> c.getCustomer() == customer)
-                    .collect(Collectors.toList());
+            List<Contract> contracts = ContractDAO.findByCustomerId(customer.getCustomerId());
 
             if (contracts.isEmpty()) {
                 // A1: 가입된 보험 계약 없음
@@ -197,9 +197,7 @@ public class MyInsuranceViewRunner {
         ConsoleHelper.printDivider();
         System.out.println("  [납입내역 탭]");
 
-        List<PaymentRecord> records = Repository.paymentRecords.stream()
-                .filter(r -> r.getContract() == contract)
-                .collect(Collectors.toList());
+        List<PaymentRecord> records = PaymentRecordDAO.findByContractNo(contract.getContractNo());
 
         // A7: 납입 내역 기간 선택
         int periodChoice = ConsoleHelper.readMenuChoice("[고객] 조회 기간을 선택하세요:",
@@ -274,7 +272,7 @@ public class MyInsuranceViewRunner {
     }
 
     private static Customer selectCustomer() {
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다.");
             return null;

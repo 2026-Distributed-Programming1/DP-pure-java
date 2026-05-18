@@ -40,6 +40,12 @@ public class AccidentReport {
         this.agreedTerms = false;
     }
 
+    /** DB 로딩용 생성자 */
+    public AccidentReport(String reportNo) {
+        this.reportNo = reportNo;
+        this.status = AccidentReportStatus.RECEIVED;
+    }
+
     /** 차량 정보 입력 */
     public void enterVehicleInfo(String vehicleNo, String ownerName, String contact) {
         this.vehicleNo = vehicleNo;

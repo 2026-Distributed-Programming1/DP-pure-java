@@ -1,10 +1,12 @@
 package dp.runner.usecase;
 
 import dp.actor.SalesManager;
+import dp.dao.ChannelRecruitmentDAO;
+import dp.dao.SalesManagerDAO;
 import dp.enums.ChannelType;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import dp.sales.ChannelRecruitment;
+import java.util.List;
 
 import java.time.LocalDate;
 
@@ -41,7 +43,7 @@ public class ChannelRecruitmentRunner {
         System.out.println("UC: 판매채널을 모집한다");
         ConsoleHelper.printDoubleDivider();
 
-        SalesManager manager = Repository.salesManagers.get(0);
+        SalesManager manager = SalesManagerDAO.findAll().get(0);
 
         // 1. [영업 활동을 관리한다] A1)으로부터 넘어온다.
         ConsoleHelper.printInfo("[영업 활동을 관리한다] A1) 인원 충당 필요로 채널 모집 화면으로 이동합니다.");
@@ -53,10 +55,11 @@ public class ChannelRecruitmentRunner {
         ConsoleHelper.printInfo(" ───────────────────────────────────────────────────────── ");
         ConsoleHelper.printInfo("   [기존 모집 공고 목록]                                      ");
         ConsoleHelper.printInfo("   모집번호 / 채널유형 / 모집인원 / 모집기간 / 등록일시            ");
-        if (Repository.channelRecruitments.isEmpty()) {
+        List<ChannelRecruitment> channelRecruitments = ChannelRecruitmentDAO.findAll();
+        if (channelRecruitments.isEmpty()) {
             ConsoleHelper.printInfo("   (등록된 모집 공고가 없습니다.)                               ");
         } else {
-            for (ChannelRecruitment r : Repository.channelRecruitments) {
+            for (ChannelRecruitment r : channelRecruitments) {
                 String type = r.getChannelType() == ChannelType.DESIGNER ? "설계사" : "대리점";
                 ConsoleHelper.printInfo("│  " + r.getRecruitmentNo()
                         + " | " + type
@@ -166,7 +169,7 @@ public class ChannelRecruitmentRunner {
         ConsoleHelper.readLine("  [확인] (엔터를 눌러 확인): ");
 
         // 8. 시스템은 등록 완료 결과를 출력하고 [영업 활동을 관리한다]로 복귀한다.
-        Repository.channelRecruitments.add(recruitment);
+        ChannelRecruitmentDAO.save(recruitment);
         recruitment.showSaveResult();
         ConsoleHelper.printStage("시스템", "등록 완료 결과를 출력합니다.");
         String channelTypeStr = recruitment.getChannelType() == ChannelType.DESIGNER ? "설계사" : "대리점";

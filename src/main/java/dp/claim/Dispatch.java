@@ -23,6 +23,13 @@ public class Dispatch {
     private DispatchStatus status;            // 상태
     private String cancelReason;              // 취소 사유
 
+    /** DB 로딩용 생성자 */
+    public Dispatch(String dispatchNo, AccidentReport accident, DispatchStatus status) {
+        this.dispatchNo = dispatchNo;
+        this.accident = accident;
+        this.status = status;
+    }
+
     /** 생성자 - 출동번호 자동 부여, status="신청" */
     public Dispatch(AccidentReport accident) {
         sequence += 1;

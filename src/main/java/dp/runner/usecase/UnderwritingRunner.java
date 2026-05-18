@@ -8,8 +8,13 @@ import dp.consultation.PolicyApplication;
 import dp.consultation.ReviewResult;
 import dp.consultation.Underwriting;
 import dp.contract.Contract;
+import dp.dao.ContractDAO;
+import dp.dao.InsuranceApplicationDAO;
+import dp.dao.InsuranceProductDAO;
+import dp.dao.InsuranceReviewerDAO;
+import dp.dao.PolicyApplicationDAO;
+import dp.dao.UnderwritingDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,25 +65,27 @@ public class UnderwritingRunner {
         ConsoleHelper.printDoubleDivider();
 
         // 2. 시스템은 인수 심사 화면을 출력한다. (E1)
-        if (Repository.policyApplications.isEmpty() && Repository.insuranceApplications.isEmpty()) {
+        List<PolicyApplication> policyApplications = PolicyApplicationDAO.findAll();
+        List<InsuranceApplication> insuranceApplications = InsuranceApplicationDAO.findAll();
+        if (policyApplications.isEmpty() && insuranceApplications.isEmpty()) {
             // E1) 심사 대기 건이 없는 경우
             ConsoleHelper.printError("[E1] 처리할 심사 건이 없습니다.");
             ConsoleHelper.waitEnter();
             return;
         }
 
-        InsuranceReviewer reviewerActor = Repository.insuranceReviewers.get(0);
+        InsuranceReviewer reviewerActor = InsuranceReviewerDAO.findAll().get(0);
 
         // 3. 심사 대기 목록 구성 (청약서 + 보험신청 통합)
         List<Object> pendingApps = new ArrayList<>();
         List<String> pendingLabels = new ArrayList<>();
-        for (PolicyApplication pa : Repository.policyApplications) {
+        for (PolicyApplication pa : policyApplications) {
             pendingApps.add(pa);
             pendingLabels.add("[청약] #" + pa.getApplicationNumber()
                     + " - " + (pa.getCustomerName() != null ? pa.getCustomerName() : "미정")
                     + " / " + pa.getProductName());
         }
-        for (InsuranceApplication ia : Repository.insuranceApplications) {
+        for (InsuranceApplication ia : insuranceApplications) {
             pendingApps.add(ia);
             pendingLabels.add("[신청] #" + ia.getApplicationNumber()
                     + " - " + (ia.getCustomer() != null ? ia.getCustomer().getName() : "미정")
@@ -160,7 +167,7 @@ public class UnderwritingRunner {
             rejectionReason = ConsoleHelper.readNonEmpty("  거절 사유: ");
         }
         underwriting.complete(resultStr, condition, rejectionReason);
-        Repository.underwritings.add(underwriting);
+        UnderwritingDAO.save(underwriting);
 
         // 10. 심사 결과를 전달한다 유스케이스로 이동
         ConsoleHelper.printDoubleDivider();
@@ -216,7 +223,7 @@ public class UnderwritingRunner {
                 productName = application.getProductName();
                 period = application.getPeriod();
                 final String pName = productName;
-                premium = Repository.insuranceProducts.stream()
+                premium = InsuranceProductDAO.findAll().stream()
                         .filter(p -> p.getProductName().equals(pName))
                         .mapToLong(InsuranceProduct::getMonthlyPremium)
                         .findFirst().orElse(0L);
@@ -233,7 +240,7 @@ public class UnderwritingRunner {
                 LocalDate today = LocalDate.now();
                 Contract contract = new Contract(approvedCustomer, today, today.plusYears(period), premium);
                 contract.setInsuranceType(productName);
-                Repository.contracts.add(contract);
+                ContractDAO.save(contract);
                 ConsoleHelper.printSuccess("[시스템] 계약이 생성되었습니다: " + contract.getContractNo()
                         + " (증권번호: " + contract.getPolicyNo() + ")");
             }

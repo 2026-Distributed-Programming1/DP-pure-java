@@ -1,0 +1,67 @@
+package dp.dao;
+
+import dp.actor.Customer;
+import dp.claim.ClaimRequest;
+import dp.contract.Contract;
+import dp.db.DBA;
+import dp.enums.ClaimRequestStatus;
+import java.util.List;
+
+public class ClaimRequestDAO {
+
+    public static void save(ClaimRequest r) {
+        String customerId   = r.getCustomer() != null ? r.getCustomer().getCustomerId() : null;
+        String customerName = r.getCustomer() != null ? r.getCustomer().getName() : null;
+        String contractNo   = r.getContract() != null ? r.getContract().getContractNo() : null;
+        String claimType    = r.getClaimType() != null ? r.getClaimType().name() : null;
+        String reasons      = r.getClaimReasons() != null ? String.join(",", r.getClaimReasons()) : null;
+        String bankName     = r.getBankAccount() != null ? r.getBankAccount().getBankName() : null;
+        String accountNo    = r.getBankAccount() != null ? r.getBankAccount().getAccountNo() : null;
+        String holder       = r.getBankAccount() != null ? r.getBankAccount().getAccountHolder() : null;
+        String status       = r.getStatus() != null ? r.getStatus().name() : null;
+        DBA.executeUpdate(
+            "INSERT INTO claim_requests (claim_no, customer_id, customer_name, contract_no,"
+            + " claim_type, diagnosis, claim_reasons, bank_name, account_no, account_holder,"
+            + " requested_at, status)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+            + " ON DUPLICATE KEY UPDATE status=VALUES(status), requested_at=VALUES(requested_at)",
+            r.getClaimNo(), customerId, customerName, contractNo,
+            claimType, r.getDiagnosis(), reasons,
+            bankName, accountNo, holder,
+            r.getRequestedAt(), status);
+    }
+
+    public static List<ClaimRequest> findAll() {
+        return DBA.executeQuery(
+            "SELECT claim_no, customer_id, customer_name, contract_no, claim_type,"
+            + " diagnosis, status FROM claim_requests",
+            rs -> {
+                String cid  = rs.getString("customer_id");
+                String cname = rs.getString("customer_name");
+                Customer customerShell = new Customer(
+                    cid != null ? cid : "?",
+                    cname != null ? cname : "",
+                    null, null, null);
+                String cno = rs.getString("contract_no");
+                Contract contractShell = null;
+                if (cno != null) {
+                    contractShell = new Contract();
+                    contractShell.setContractNo(cno);
+                    contractShell.setCustomer(customerShell);
+                }
+                String st = rs.getString("status");
+                ClaimRequestStatus status = ClaimRequestStatus.DRAFT;
+                if (st != null) {
+                    try { status = ClaimRequestStatus.valueOf(st); }
+                    catch (IllegalArgumentException ignored) {}
+                }
+                return new ClaimRequest(
+                    rs.getString("claim_no"), customerShell, contractShell, status);
+            });
+    }
+
+    public static boolean existsByClaimNo(String claimNo) {
+        return DBA.exists(
+            "SELECT 1 FROM damage_investigations WHERE claim_no=?", claimNo);
+    }
+}

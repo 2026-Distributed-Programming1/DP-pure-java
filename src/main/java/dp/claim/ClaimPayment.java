@@ -35,6 +35,16 @@ public class ClaimPayment {
     private String failureReason;               // 실패 사유
     private ClaimPaymentStatus status;          // 상태
 
+    /** DB 로딩용 생성자 - 자동 로드 없이 필드 직접 설정 */
+    public ClaimPayment(String paymentNo, ClaimCalculation calculation,
+                        long finalAmount, ClaimPaymentStatus status) {
+        this.paymentNo = paymentNo;
+        this.calculation = calculation;
+        this.finalAmount = finalAmount;
+        this.status = status;
+        this.noticeOption = new java.util.ArrayList<>();
+    }
+
     /** 생성자 - 지급번호 자동 부여, 수령인·계좌 자동 로드 */
     public ClaimPayment(ClaimCalculation calculation) {
         sequence += 1;

@@ -37,6 +37,14 @@ public class Customer extends User {
         this.registeredAt = LocalDateTime.now();
     }
 
+    /** DB 로딩용 생성자 - 자동증가 없이 customerId 직접 지정 */
+    public Customer(String customerId, String name, String residentNo, String phone, String email) {
+        super(customerId, name, phone, email);
+        this.customerId = customerId;
+        this.residentNo = residentNo;
+        this.registeredAccounts = new ArrayList<>();
+    }
+
     /** 정보 수정 */
     public void updateInfo() {
         System.out.println("고객 정보(주소: " + address + ", 연락처: " + getContact() + ")가 업데이트되었습니다.");

@@ -29,6 +29,16 @@ public class Cancellation {
         this.status   = "작성중";
     }
 
+    /** DB 로딩용 생성자 */
+    public Cancellation(String cancellationNo, Contract contract, String reason,
+                        long expectedRefund, String status) {
+        this.cancellationNo = cancellationNo;
+        this.contract = contract;
+        this.reason = reason;
+        this.expectedRefund = expectedRefund;
+        this.status = status;
+    }
+
     /** 해지 사유 선택 - A1 */
     public void selectReason(String reason) {
         this.reason = reason;

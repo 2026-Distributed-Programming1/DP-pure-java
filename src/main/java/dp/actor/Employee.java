@@ -26,6 +26,14 @@ public abstract class Employee extends User {
         this.hireDate = LocalDate.now();
     }
 
+    /** DB 로딩용 생성자 - 자동증가 없이 employeeId 직접 지정 */
+    protected Employee(String employeeId, String name, String dept, String position) {
+        super(employeeId, name, null, null);
+        this.employeeId = employeeId;
+        this.department = dept;
+        this.position = position;
+    }
+
     // Getter
     public String getEmployeeId() { return employeeId; }
     public String getDepartment() { return department; }

@@ -5,8 +5,8 @@ import dp.enums.InquiryStatus;
 import dp.enums.InquiryType;
 import dp.inquiry.CustomerCenterPage;
 import dp.inquiry.Inquiry;
+import dp.dao.InquiryDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 
 /**
  * UC: 문의한다 시나리오 진행자
@@ -169,7 +169,7 @@ public class InquiryRunner {
 
         // 7. 시스템은 문의 정보를 저장하고 고유한 문의 번호를 부여한다.
         inquiry.submit();
-        Repository.inquiries.add(inquiry);
+        InquiryDAO.save(inquiry);
         ConsoleHelper.printStage("시스템", "문의 정보를 저장하고 문의 번호를 부여합니다.");
 
         // 8. 시스템은 접수 완료 팝업을 출력한다.

@@ -1,8 +1,8 @@
 package dp.runner.usecase;
 
 import dp.enums.ContractStatus;
+import dp.dao.ContractDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import dp.contract.Contract;
 
 import java.time.LocalDate;
@@ -151,7 +151,7 @@ public class ContractInfoRunner {
             ConsoleHelper.printInfo("[A5] 가입된 특약 없음");
         }
 
-        Repository.contractInfos.add(contract);
+        ContractDAO.save(contract);
 
         // 5. 계약관리 담당자는 처리를 선택한다. (A3, A4)
         int action = ConsoleHelper.readMenuChoice(

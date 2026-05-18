@@ -5,8 +5,10 @@ import dp.claim.Dispatch;
 import dp.claim.DispatchRecord;
 import dp.common.Attachment;
 import dp.enums.DispatchStatus;
+import dp.dao.DispatchAgentDAO;
+import dp.dao.DispatchDAO;
+import dp.dao.DispatchRecordDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -79,7 +81,7 @@ public class DispatchRecordRunner {
         dispatch.arrive();
 
         DispatchRecord record = new DispatchRecord(dispatch);
-        Repository.dispatchRecords.add(record);
+        DispatchRecordDAO.save(record);
 
         // 사진 업로드 (시연용 - 실제로는 카메라/파일 선택)
         ConsoleHelper.printStage("현장출동 직원", "현장 사진을 업로드합니다.");
@@ -123,7 +125,7 @@ public class DispatchRecordRunner {
     }
 
     private static Dispatch selectDispatch() {
-        List<Dispatch> available = Repository.dispatches.stream()
+        List<Dispatch> available = DispatchDAO.findAll().stream()
                 .filter(d -> d.getStatus() != DispatchStatus.COMPLETED
                         && d.getStatus() != DispatchStatus.CANCELED)
                 .collect(Collectors.toList());
@@ -133,7 +135,12 @@ public class DispatchRecordRunner {
             return null;
         }
         String[] options = available.stream()
-                .map(d -> d.getDispatchNo() + " - " + d.getAccident().getLocation()
+                .map(d -> d.getDispatchNo()
+                        + (d.getAccident() != null
+                            ? " - " + (d.getAccident().getLocation() != null
+                                ? d.getAccident().getLocation()
+                                : d.getAccident().getReportNo())
+                            : "")
                         + " [" + d.getStatus() + "]")
                 .toArray(String[]::new);
         int choice = ConsoleHelper.readMenuChoice("[시스템] 처리할 출동 건을 선택하세요:", options);
@@ -141,7 +148,7 @@ public class DispatchRecordRunner {
     }
 
     private static DispatchAgent selectAgent() {
-        List<DispatchAgent> agents = Repository.dispatchAgents;
+        List<DispatchAgent> agents = DispatchAgentDAO.findAll();
         if (agents.isEmpty()) {
             ConsoleHelper.printError("배정 가능한 출동 직원이 없습니다.");
             return null;

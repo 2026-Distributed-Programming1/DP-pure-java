@@ -16,6 +16,12 @@ public class ClaimsHandler extends Employee {
         this.transferLimit = limit;
     }
 
+    /** DB 로딩용 생성자 */
+    public ClaimsHandler(String employeeId, String name, String dept, String position, long limit) {
+        super(employeeId, name, dept, position);
+        this.transferLimit = limit;
+    }
+
     // 실제 비즈니스 로직은 도메인 객체(DamageInvestigation, ClaimCalculation, ClaimPayment 등)에 있다.
     // 본 구현에서는 행위자 메서드를 본문 없이 정의하지 않고, 호출 측(Main)에서 직접 도메인 객체의 메서드를 호출하는 방식으로 진행한다.
 

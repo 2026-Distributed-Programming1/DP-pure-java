@@ -4,8 +4,8 @@ import dp.claim.ClaimPayment;
 import dp.enums.ClaimPaymentStatus;
 import dp.enums.NoticeMethod;
 import dp.enums.PaymentType;
+import dp.dao.ClaimPaymentDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -196,7 +196,7 @@ public class ClaimPaymentRunner {
     }
 
     private static ClaimPayment selectPayment() {
-        List<ClaimPayment> available = Repository.claimPayments.stream()
+        List<ClaimPayment> available = ClaimPaymentDAO.findAll().stream()
                 .filter(p -> p.getStatus() == ClaimPaymentStatus.WAITING)
                 .collect(Collectors.toList());
         if (available.isEmpty()) {

@@ -3,9 +3,14 @@ package dp.runner.usecase;
 import dp.enums.ActivityType;
 import dp.enums.InsuranceType;
 import dp.enums.PlanStatus;
+import dp.actor.Agency;
+import dp.actor.Designer;
+import dp.dao.ActivityPlanDAO;
+import dp.dao.AgencyDAO;
+import dp.dao.DesignerDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import dp.sales.ActivityPlan;
+import java.util.List;
 import dp.sales.ScheduleItem;
 
 import java.time.LocalDate;
@@ -61,9 +66,11 @@ public class ActivityPlanRunner {
         ConsoleHelper.printStage("판매채널", "활동 계획 정보를 입력합니다.");
 
         // 작성자 자동입력
-        String author = Repository.agencies.isEmpty()
-                ? (Repository.designers.isEmpty() ? "판매채널" : Repository.designers.get(0).getName())
-                : Repository.agencies.get(0).getName();
+        List<Agency> agencies = AgencyDAO.findAll();
+        List<Designer> designers = DesignerDAO.findAll();
+        String author = agencies.isEmpty()
+                ? (designers.isEmpty() ? "판매채널" : designers.get(0).getName())
+                : agencies.get(0).getName();
         plan.setAuthor(author);
         ConsoleHelper.printInfo("  작성자 (자동입력): " + author);
 
@@ -162,7 +169,7 @@ public class ActivityPlanRunner {
         if (action == 2) {
             // A3) 임시저장이 필요한 경우
             plan.tempSave();
-            Repository.activityPlans.add(plan);
+            ActivityPlanDAO.save(plan);
             plan.showTempSaveMessage();
             ConsoleHelper.printStage("시스템", "임시저장되었습니다.");
             ConsoleHelper.printInfo("계획ID: " + plan.getPlanId() + " | 상태: 임시저장");
@@ -188,7 +195,7 @@ public class ActivityPlanRunner {
         // 6. 시스템은 활동 계획을 저장하고 영업 관리자에게 검토 요청 알림을 발송한다.
         plan.submit();
         plan.notifyManager();
-        Repository.activityPlans.add(plan);
+        ActivityPlanDAO.save(plan);
         ConsoleHelper.printStage("시스템", "활동 계획을 저장하고 영업 관리자에게 검토 요청 알림을 발송합니다.");
 
         // 7. 시스템은 "활동 계획이 제출되었습니다." 팝업 메시지를 출력한다.

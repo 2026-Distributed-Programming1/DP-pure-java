@@ -2,8 +2,9 @@ package dp.runner.usecase;
 
 import dp.actor.Customer;
 import dp.consultation.InsuranceProduct;
+import dp.dao.CustomerDAO;
+import dp.dao.InsuranceProductDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class InsuranceProductInquiryRunner {
         ConsoleHelper.printStage("시스템", "보험상품 조회 화면을 출력합니다.");
         ConsoleHelper.printInfo("조회 조건: 보험유형 (전체/건강/생명/손해) | 월보험료 범위");
 
-        List<InsuranceProduct> products = Repository.insuranceProducts;
+        List<InsuranceProduct> products = InsuranceProductDAO.findAll();
 
         // E1) 조회 가능한 보험상품이 없는 경우
         if (products.isEmpty()) {
@@ -119,7 +120,7 @@ public class InsuranceProductInquiryRunner {
     }
 
     private static Customer selectCustomer() {
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다.");
             return null;

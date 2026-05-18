@@ -4,8 +4,9 @@ import dp.enums.PaymentRecordStatus;
 import dp.enums.RejectCategory;
 import dp.payment.OverdueNoticeSetting;
 import dp.payment.PaymentRecord;
+import dp.dao.OverdueNoticeSettingDAO;
+import dp.dao.PaymentRecordDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class PaymentRecordRunner {
     }
 
     private static void processRecords() {
-        List<PaymentRecord> waiting = Repository.paymentRecords.stream()
+        List<PaymentRecord> waiting = PaymentRecordDAO.findAll().stream()
                 .filter(r -> r.getStatus() == PaymentRecordStatus.WAITING)
                 .collect(Collectors.toList());
 
@@ -92,10 +93,9 @@ public class PaymentRecordRunner {
 
     /** 미납 알림 자동 발송 설정 */
     private static void configureOverdueNotice() {
-        OverdueNoticeSetting setting = Repository.overdueNoticeSetting;
+        OverdueNoticeSetting setting = OverdueNoticeSettingDAO.find();
         if (setting == null) {
             setting = new OverdueNoticeSetting();
-            Repository.overdueNoticeSetting = setting;
         }
 
         ConsoleHelper.printStage("재무회계 담당자", "미납 알림 자동 발송을 설정합니다.");
@@ -115,6 +115,7 @@ public class PaymentRecordRunner {
             ConsoleHelper.printInfo("미리보기: " + setting.previewMessage());
         }
         setting.save();
+        OverdueNoticeSettingDAO.save(setting);
         ConsoleHelper.waitEnter();
     }
 

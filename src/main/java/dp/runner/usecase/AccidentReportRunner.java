@@ -4,8 +4,10 @@ import dp.actor.Customer;
 import dp.claim.AccidentReport;
 import dp.claim.Dispatch;
 import dp.enums.AccidentType;
+import dp.dao.AccidentReportDAO;
+import dp.dao.CustomerDAO;
+import dp.dao.DispatchDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 
 /**
@@ -80,14 +82,14 @@ public class AccidentReportRunner {
 
         // 9) 접수 처리
         report.receive();
-        Repository.accidentReports.add(report);
+        AccidentReportDAO.save(report);
         ConsoleHelper.printSuccess("사고 접수번호: " + report.getReportNo());
 
         // 10) A2 분기 처리 - 현장출동 신청 여부에 따라
         if (needsDispatch) {
             Dispatch dispatch = report.requestDispatch();
             if (dispatch != null) {
-                Repository.dispatches.add(dispatch);
+                DispatchDAO.save(dispatch);
                 ConsoleHelper.printSuccess("현장출동 신청 완료: " + dispatch.getDispatchNo());
                 ConsoleHelper.printInfo("→ 현장출동 서비스 부서로 신청 내역이 전달되었습니다.");
             }
@@ -101,7 +103,7 @@ public class AccidentReportRunner {
 
     /** 샘플 고객 중 선택 */
     private static Customer selectCustomer() {
-        List<Customer> customers = Repository.customers;
+        List<Customer> customers = CustomerDAO.findAll();
         if (customers.isEmpty()) {
             ConsoleHelper.printError("등록된 고객이 없습니다.");
             return null;

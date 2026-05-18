@@ -1,8 +1,8 @@
 package dp.runner.usecase;
 
+import dp.dao.ChannelScreeningDAO;
 import dp.enums.ChannelType;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import dp.sales.ChannelScreening;
 
 import java.time.LocalDate;
@@ -130,7 +130,7 @@ public class ChannelScreeningRunner {
             screening.setRejectionReason(rejectionReason);
             // 영업 관리자는 거절 사유를 입력하고 [확인] 버튼을 클릭한다.
             screening.reject();
-            Repository.channelScreenings.add(screening);
+            ChannelScreeningDAO.save(screening);
             // 시스템은 "해당 지원자가 거절 처리되었습니다." 메시지를 출력한다.
             ConsoleHelper.printStage("시스템", "해당 지원자가 거절 처리되었습니다.");
             ConsoleHelper.printInfo("지원자명: " + screening.getApplicantName()
@@ -182,7 +182,7 @@ public class ChannelScreeningRunner {
 
         // 완료 결과 출력
         screening.showApprovalResult();
-        Repository.channelScreenings.add(screening);
+        ChannelScreeningDAO.save(screening);
         ConsoleHelper.printStage("시스템", "완료 결과를 출력합니다.");
         ConsoleHelper.printInfo("승인번호: " + screening.getApprovalNo()
                 + " | 승인일시: " + screening.getApprovedAt()

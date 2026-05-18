@@ -2,9 +2,11 @@ package dp.runner.usecase;
 
 import dp.actor.Customer;
 import dp.contract.Contract;
+import dp.dao.ContractDAO;
+import dp.dao.CustomerDAO;
+import dp.dao.CustomerRegistrationDAO;
 import dp.enums.InsuranceType;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import dp.sales.CustomerRegistration;
 
 import java.time.LocalDate;
@@ -147,7 +149,7 @@ public class CustomerRegistrationRunner {
 
         // 8. 시스템은 중복 데이터 여부를 검증한다. (E2)
         ConsoleHelper.printStage("시스템", "중복 데이터 여부를 검증합니다.");
-        boolean isDuplicate = Repository.customerRegistrations.stream()
+        boolean isDuplicate = CustomerRegistrationDAO.findAll().stream()
                 .anyMatch(r -> r.getSsn().equals(registration.getSsn()));
         if (isDuplicate) {
             // E2) 중복 데이터 감지
@@ -162,11 +164,11 @@ public class CustomerRegistrationRunner {
         // 9. 시스템은 고객번호와 계약번호를 자동으로 부여한다.
         registration.assignIds();
         registration.save();
-        Repository.customerRegistrations.add(registration);
+        CustomerRegistrationDAO.save(registration);
 
         Customer customer = new Customer(
                 registration.getName(), registration.getSsn(), registration.getPhone(), "");
-        Repository.customers.add(customer);
+        CustomerDAO.save(customer);
 
         Contract contract = new Contract(
                 customer,
@@ -174,7 +176,7 @@ public class CustomerRegistrationRunner {
                 registration.getExpiryDate(),
                 registration.getMonthlyPremium());
         contract.setInsuranceType(registration.getInsuranceType().name());
-        Repository.contracts.add(contract);
+        ContractDAO.save(contract);
 
         ConsoleHelper.printStage("시스템", "고객번호와 계약번호를 자동으로 부여합니다.");
         ConsoleHelper.printInfo("고객번호: " + customer.getCustomerNo()

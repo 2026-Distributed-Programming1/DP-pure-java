@@ -3,8 +3,10 @@ package dp.runner.usecase;
 import dp.actor.EducationTrainer;
 import dp.education.EducationPlan;
 import dp.education.EducationPreparation;
+import dp.dao.EducationPlanDAO;
+import dp.dao.EducationPreparationDAO;
+import dp.dao.EducationTrainerDAO;
 import dp.runner.ConsoleHelper;
-import dp.runner.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +44,7 @@ public class EducationPreparationRunner {
         ConsoleHelper.printStage("시스템", "교육 제반 등록 화면을 출력합니다.");
 
         // 3~4. 승인된 교육 계획안 목록 조회
-        List<EducationPlan> approvedPlans = Repository.educationPlans.stream()
+        List<EducationPlan> approvedPlans = EducationPlanDAO.findAll().stream()
                 .filter(p -> p.getStatus().equals("승인"))
                 .collect(Collectors.toList());
 
@@ -61,7 +63,7 @@ public class EducationPreparationRunner {
                     + " | 대상자수: " + p.getTargetCount());
         }
 
-        EducationTrainer trainer = Repository.educationTrainers.get(0);
+        EducationTrainer trainer = EducationTrainerDAO.findAll().get(0);
         EducationPreparation preparation = trainer.registerEducationPreparation();
 
         // 6. 시스템은 제반 등록 화면을 출력한다.
@@ -104,7 +106,7 @@ public class EducationPreparationRunner {
         }
 
         preparation.save();
-        Repository.educationPreparations.add(preparation);
+        EducationPreparationDAO.save(preparation);
 
         // 10. 시스템은 등록 완료 결과를 출력한다.
         ConsoleHelper.printStage("시스템", "등록이 완료되었습니다.");
