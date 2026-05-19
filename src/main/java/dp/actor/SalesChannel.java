@@ -19,12 +19,6 @@ public class SalesChannel {
         this.channelName = channelName;
     }
 
-    /** DB 로딩용 생성자 */
-    public SalesChannel(String channelId, String channelName) {
-        this.channelId = channelId;
-        this.channelName = channelName;
-    }
-
     // ===== 다이어그램 메서드 =====
     public void getActivityDetail() {}
 

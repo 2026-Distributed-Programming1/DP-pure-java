@@ -23,15 +23,6 @@ public class ScheduleItem {
         this.memo = memo;
     }
 
-    /** DB 로딩용 생성자 */
-    public ScheduleItem(String customerId, ActivityType activityType, LocalDateTime activityDateTime, String location, String memo) {
-        this.customerId = customerId;
-        this.activityType = activityType;
-        this.activityDateTime = activityDateTime;
-        this.location = location;
-        this.memo = memo;
-    }
-
     public void delete() {}
     //getter,setter
     public void setCustomerId(String customerId) { this.customerId = customerId; }

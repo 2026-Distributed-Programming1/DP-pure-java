@@ -23,16 +23,6 @@ public class SalesActivityManagement {
     private String managementNo;           // 관리번호
     private LocalDateTime registeredAt;    // 등록 일시
 
-    public SalesActivityManagement() {}
-
-    /** DB 로딩용 생성자 */
-    public SalesActivityManagement(String managementNo, String channelName, ChannelType channelType, LocalDateTime registeredAt) {
-        this.managementNo = managementNo;
-        this.channelName = channelName;
-        this.channelType = channelType;
-        this.registeredAt = registeredAt;
-    }
-
     public void loadActivityTable() {} //전체 현황 테이블 출력
 
     public void search() {} //조건 필터링

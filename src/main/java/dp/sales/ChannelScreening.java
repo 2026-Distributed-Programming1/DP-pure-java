@@ -31,17 +31,6 @@ public class ChannelScreening {
 //        this.applicationDate = LocalDate.now();
 //    }
 
-    public ChannelScreening() {}
-
-    /** DB 로딩용 생성자 */
-    public ChannelScreening(String approvalNo, String applicantName, ChannelType channelType, LocalDate applicationDate, ScreeningStatus screeningStatus) {
-        this.approvalNo = approvalNo;
-        this.applicantName = applicantName;
-        this.channelType = channelType;
-        this.applicationDate = applicationDate;
-        this.screeningStatus = screeningStatus;
-    }
-
     public void loadApplicantList() {}
 
     public void search() {}
