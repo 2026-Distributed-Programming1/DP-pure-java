@@ -15,6 +15,7 @@ public class SalesManager {
     private String name;         // 이름
     private String department;   // 부서
 
+    /** 생성자 - managerId 자동 부여 */
     public SalesManager(String name, String department) {
         this.managerId = "MGR-" + name;
         this.name = name;
@@ -24,6 +25,18 @@ public class SalesManager {
     /** SampleData 호환용 — email은 클래스 다이어그램에 없으므로 저장하지 않는다. */
     public SalesManager(String name, String department, String email) {
         this(name, department);
+    }
+
+    /**
+     * DB 로딩용 팩토리 메서드 - 자동부여 없이 managerId 직접 지정
+     * ※ 생성자 대신 팩토리 메서드를 사용하는 이유:
+     *   SampleData 호환용 생성자 (String name, String department, String email) 와
+     *   파라미터 타입 시그니처 (String, String, String) 가 겹쳐 생성자 오버로딩이 불가능하기 때문.
+     */
+    public static SalesManager fromDb(String managerId, String name, String department) {
+        SalesManager m = new SalesManager(name, department);
+        m.managerId = managerId;
+        return m;
     }
 
     public void approveEducationPlan(EducationPlan plan) {

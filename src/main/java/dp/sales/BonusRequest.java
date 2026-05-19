@@ -21,6 +21,19 @@ public class BonusRequest {
     private String requestNo;              // 요청 번호
     private LocalDateTime requestedAt;     // 요청일시
 
+    public BonusRequest() {}
+
+    /** DB 로딩용 생성자 */
+    public BonusRequest(String requestNo, String channelName, ChannelType channelType, EvaluationGrade evaluationGrade, Double bonusAmount, LocalDateTime requestedAt) {
+        this.requestNo = requestNo;
+        this.channelName = channelName;
+        this.channelType = channelType;
+        this.evaluationGrade = evaluationGrade;
+        this.bonusRatio = (evaluationGrade == EvaluationGrade.S) ? 1.5 : 1.2;
+        this.bonusAmount = bonusAmount;
+        this.requestedAt = requestedAt;
+    }
+
     public void loadRequestScreen() {}
 
     public Double calculateBonus() {

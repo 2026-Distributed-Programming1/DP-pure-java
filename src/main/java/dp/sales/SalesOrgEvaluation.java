@@ -23,6 +23,17 @@ public class SalesOrgEvaluation {
     private String evaluationNo;           // 평가번호
     private LocalDateTime evaluatedAt;     // 등록 일시
 
+    public SalesOrgEvaluation() {}
+
+    /** DB 로딩용 생성자 */
+    public SalesOrgEvaluation(String evaluationNo, String channelName, ChannelType channelType, EvaluationGrade evaluationGrade, LocalDateTime evaluatedAt) {
+        this.evaluationNo = evaluationNo;
+        this.channelName = channelName;
+        this.channelType = channelType;
+        this.evaluationGrade = evaluationGrade;
+        this.evaluatedAt = evaluatedAt;
+    }
+
     public void loadPerformanceTable() {}
 
     public void search() {}

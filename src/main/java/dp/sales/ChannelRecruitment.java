@@ -18,6 +18,19 @@ public class ChannelRecruitment {
     private String condition;               // 모집 조건 선택
     private LocalDateTime registeredAt;     // 등록 일시
 
+    public ChannelRecruitment() {}
+
+    /** DB 로딩용 생성자 */
+    public ChannelRecruitment(String recruitmentNo, ChannelType channelType, Integer recruitCount, LocalDate startDate, LocalDate endDate, String condition, LocalDateTime registeredAt) {
+        this.recruitmentNo = recruitmentNo;
+        this.channelType = channelType;
+        this.recruitCount = recruitCount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.condition = condition;
+        this.registeredAt = registeredAt;
+    }
+
     public void loadRecruitmentList() {}
     public void openRegistrationForm() {}
 

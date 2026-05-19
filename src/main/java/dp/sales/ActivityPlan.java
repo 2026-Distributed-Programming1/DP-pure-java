@@ -33,6 +33,18 @@ public class ActivityPlan {
 //        this.status = PlanStatus.TEMP_SAVE;
 //    }
 
+    public ActivityPlan() {}
+
+    /** DB 로딩용 생성자 */
+    public ActivityPlan(String planId, String planName, LocalDate startDate, LocalDate endDate, String author, PlanStatus status) {
+        this.planId = planId;
+        this.planName = planName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.author = author;
+        this.status = status;
+    }
+
     public Boolean validateDateRange() {
         if (startDate == null || endDate == null) return false;
         return !endDate.isBefore(startDate);

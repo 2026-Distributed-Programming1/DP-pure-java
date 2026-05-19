@@ -66,6 +66,21 @@ public class Contract {
         this.isOverdue     = false;
     }
 
+    /** DB 로딩용 생성자 */
+    public Contract(String contractNo, String policyNo, Customer customer, LocalDate contractDate, LocalDate expiryDate, long monthlyPremium) {
+        this.contractNo    = contractNo;
+        this.policyNo      = policyNo;
+        this.customer      = customer;
+        this.contractDate  = contractDate;
+        this.expiryDate    = expiryDate;
+        this.monthlyPremium = monthlyPremium;
+        this.specialClauses = new ArrayList<>();
+        this.clausePremiums = new ArrayList<>();
+        this.status        = ContractStatus.NORMAL;
+        this.isExpiringSoon = false;
+        this.isOverdue     = false;
+    }
+
     // ── 클래스 다이어그램 정의 메서드 (스텁) ──────────────────────────────────
 
     public void search() {}
