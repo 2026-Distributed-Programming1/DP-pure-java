@@ -30,6 +30,21 @@ public class CustomerRegistration {
 //        this.specialClauses = new ArrayList<>();
 //    }
 
+    public CustomerRegistration() {}
+
+    /** DB 로딩용 생성자 */
+    public CustomerRegistration(String customerId, String contractNo, String name, String ssn, String phone, InsuranceType insuranceType, LocalDate contractDate, LocalDate expiryDate, Long monthlyPremium) {
+        this.customerId = customerId;
+        this.contractNo = contractNo;
+        this.name = name;
+        this.ssn = ssn;
+        this.phone = phone;
+        this.insuranceType = insuranceType;
+        this.contractDate = contractDate;
+        this.expiryDate = expiryDate;
+        this.monthlyPremium = monthlyPremium;
+    }
+
     public void toggleSsnMask() {
         this.isSsnMasked = !this.isSsnMasked;
     }
