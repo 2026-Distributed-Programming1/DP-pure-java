@@ -12,7 +12,7 @@ public class SalesActivityManagementDAO {
             + " VALUES (?,?,?,?,?)"
             + " ON DUPLICATE KEY UPDATE channel_name=VALUES(channel_name)",
             a.getManagementNo(),
-            null,
+            a.getManagerName(),
             a.getChannelName(),
             null,
             a.getRegisteredAt());

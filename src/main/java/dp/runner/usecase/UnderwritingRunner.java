@@ -117,6 +117,15 @@ public class UnderwritingRunner {
         PolicyApplication reviewTarget = (application != null) ? application : new PolicyApplication();
         Underwriting underwriting = reviewerActor.startUnderwriting(reviewTarget);
 
+        if (application != null) {
+            underwriting.setAppNo(String.valueOf(application.getApplicationNumber()));
+            underwriting.setCustomerName(application.getCustomerName());
+        } else if (insApplication != null) {
+            underwriting.setAppNo(String.valueOf(insApplication.getApplicationNumber()));
+            underwriting.setCustomerName(insApplication.getCustomer() != null
+                    ? insApplication.getCustomer().getName() : null);
+        }
+
         // 6. 시스템은 자동 심사 결과를 출력한다. (A1)
         int reviewMethod = ConsoleHelper.readMenuChoice(
                 "[시스템] 심사 방법을 선택하세요.",

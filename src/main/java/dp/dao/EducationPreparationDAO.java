@@ -13,10 +13,10 @@ public class EducationPreparationDAO {
             + " VALUES (?,?,?,?,?,?)"
             + " ON DUPLICATE KEY UPDATE venue=VALUES(venue), status=VALUES(status)",
             String.valueOf(e.getSetupNumber()),
-            null,
+            e.getPlanNo(),
             e.getInstructorName(),
             e.getLocation(),
-            false,
+            e.getTextbookStatus() != null,
             null);
     }
 

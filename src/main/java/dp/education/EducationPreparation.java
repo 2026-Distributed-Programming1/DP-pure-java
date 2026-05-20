@@ -13,6 +13,7 @@ public class EducationPreparation {
     private static int sequence = 0;
 
     private int setupNumber;
+    private String planNo;
     private LocalDateTime registeredAt;
     private String location;
     private String instructorName;
@@ -46,6 +47,8 @@ public class EducationPreparation {
     }
 
     public int getSetupNumber() { return setupNumber; }
+    public String getPlanNo() { return planNo; }
+    public void setPlanNo(String planNo) { this.planNo = planNo; }
     public LocalDateTime getRegisteredAt() { return registeredAt; }
     public String getLocation() { return location; }
     public String getInstructorName() { return instructorName; }
