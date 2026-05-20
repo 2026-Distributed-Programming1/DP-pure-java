@@ -19,6 +19,16 @@ public class Underwriting {
     private String reviewOpinion;
     private ReviewResult reviewResult;
 
+    public Underwriting(int reviewNumber, LocalDateTime reviewedAt, String riskGrade, String reviewType,
+                        String reviewOpinion, ReviewResult reviewResult) {
+        this.reviewNumber = reviewNumber;
+        this.reviewedAt = reviewedAt;
+        this.riskGrade = riskGrade;
+        this.reviewType = reviewType;
+        this.reviewOpinion = reviewOpinion;
+        this.reviewResult = reviewResult;
+    }
+
     public Underwriting() {
         sequence += 1;
         this.reviewNumber = sequence;

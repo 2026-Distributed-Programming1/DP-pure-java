@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 /**
  * 부활신청 (Revival)
- * UC: 부활을 요청한다
+ * UC: 계약 부활을 신청한다
  */
 public class Revival {
 
@@ -16,6 +16,13 @@ public class Revival {
     private LocalDateTime appliedAt;
     private long unpaidAmount;
     private String paymentMethod;
+
+    public Revival(int revivalNumber, LocalDateTime appliedAt, long unpaidAmount, String paymentMethod) {
+        this.revivalNumber = revivalNumber;
+        this.appliedAt = appliedAt;
+        this.unpaidAmount = unpaidAmount;
+        this.paymentMethod = paymentMethod;
+    }
 
     public Revival() {
         sequence += 1;

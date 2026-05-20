@@ -19,6 +19,17 @@ public class PolicyApplication {
     private int period;
     private String paymentMethod;
 
+    public PolicyApplication(int applicationNumber, LocalDateTime submittedAt, Customer customer,
+                             String customerName, String productName, int period, String paymentMethod) {
+        this.applicationNumber = applicationNumber;
+        this.submittedAt = submittedAt;
+        this.customer = customer;
+        this.customerName = customerName;
+        this.productName = productName;
+        this.period = period;
+        this.paymentMethod = paymentMethod;
+    }
+
     public PolicyApplication() {
         sequence += 1;
         this.applicationNumber = sequence;
@@ -49,8 +60,7 @@ public class PolicyApplication {
 
     public Customer getCustomer() { return customer; }
 
-    public void enterCustomerInfo(String customerName, String birthDate,
-                                   String contact, String address) {
+    public void enterCustomerInfo(String customerName, String birthDate, String contact, String address) {
         this.customerName = customerName;
     }
 

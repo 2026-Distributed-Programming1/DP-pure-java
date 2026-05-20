@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 /**
  * 면담기록 (InterviewRecord)
- * UC: 면담기록을 관리한다
+ * UC: 면담 결과를 기록한다
  */
 public class InterviewRecord {
 
@@ -16,6 +16,16 @@ public class InterviewRecord {
     private String content;
     private String customerReaction;
     private String followUpAction;
+
+    public InterviewRecord(int recordNumber, String customerName, LocalDateTime interviewedAt,
+                           String content, String customerReaction, String followUpAction) {
+        this.recordNumber = recordNumber;
+        this.customerName = customerName;
+        this.interviewedAt = interviewedAt;
+        this.content = content;
+        this.customerReaction = customerReaction;
+        this.followUpAction = followUpAction;
+    }
 
     public InterviewRecord() {
         sequence += 1;

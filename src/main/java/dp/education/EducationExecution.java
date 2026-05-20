@@ -19,6 +19,16 @@ public class EducationExecution {
 
     private final EducationPreparation preparation;
 
+    public EducationExecution(int completionNumber, LocalDateTime completedAt, int attendanceCount,
+                              int totalCount, String memo, EducationPreparation preparation) {
+        this.completionNumber = completionNumber;
+        this.completedAt = completedAt;
+        this.attendanceCount = attendanceCount;
+        this.totalCount = totalCount;
+        this.memo = memo;
+        this.preparation = preparation;
+    }
+
     public EducationExecution(EducationPreparation preparation) {
         sequence += 1;
         this.completionNumber = sequence;

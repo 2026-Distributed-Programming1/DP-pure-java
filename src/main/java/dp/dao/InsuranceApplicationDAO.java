@@ -2,6 +2,7 @@ package dp.dao;
 
 import dp.consultation.InsuranceApplication;
 import dp.db.DBA;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InsuranceApplicationDAO {
