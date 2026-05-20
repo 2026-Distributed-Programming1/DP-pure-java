@@ -1,7 +1,9 @@
 package dp.dao;
 
 import dp.db.DBA;
+import dp.enums.ChannelType;
 import dp.sales.ChannelScreening;
+import java.util.List;
 
 public class ChannelScreeningDAO {
 
@@ -22,5 +24,21 @@ public class ChannelScreeningDAO {
             s.getCareer(),
             status,
             s.getApprovedAt());
+    }
+
+    public static List<ChannelScreening> findAll() {
+        return DBA.executeQuery(
+            "SELECT screening_no, candidate_name, channel_type, qualification, status FROM channel_screenings",
+            rs -> {
+                ChannelScreening s = new ChannelScreening();
+                s.setApplicantName(rs.getString("candidate_name"));
+                String ct = rs.getString("channel_type");
+                if (ct != null) {
+                    try { s.setChannelType(ChannelType.valueOf(ct)); }
+                    catch (IllegalArgumentException ignored) {}
+                }
+                s.setCareer(rs.getString("qualification"));
+                return s;
+            });
     }
 }
