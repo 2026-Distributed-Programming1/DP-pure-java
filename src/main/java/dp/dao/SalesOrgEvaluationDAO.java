@@ -1,7 +1,9 @@
 package dp.dao;
 
 import dp.db.DBA;
+import dp.enums.EvaluationGrade;
 import dp.sales.SalesOrgEvaluation;
+import java.util.List;
 
 public class SalesOrgEvaluationDAO {
 
@@ -16,5 +18,20 @@ public class SalesOrgEvaluationDAO {
             grade,
             0.0,
             e.getEvaluatedAt());
+    }
+
+    public static List<SalesOrgEvaluation> findAll() {
+        return DBA.executeQuery(
+            "SELECT evaluation_no, org_name, grade, evaluated_at FROM sales_org_evaluations",
+            rs -> {
+                SalesOrgEvaluation e = new SalesOrgEvaluation();
+                e.setChannelName(rs.getString("org_name"));
+                String grade = rs.getString("grade");
+                if (grade != null) {
+                    try { e.setEvaluationGrade(EvaluationGrade.valueOf(grade)); }
+                    catch (IllegalArgumentException ignored) {}
+                }
+                return e;
+            });
     }
 }
