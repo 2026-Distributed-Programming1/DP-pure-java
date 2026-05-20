@@ -43,12 +43,9 @@ public class ClaimRequestDAO {
                     cname != null ? cname : "",
                     null, null, null);
                 String cno = rs.getString("contract_no");
-                Contract contractShell = null;
-                if (cno != null) {
-                    contractShell = new Contract();
-                    contractShell.setContractNo(cno);
-                    contractShell.setCustomer(customerShell);
-                }
+                Contract contractShell = cno != null
+                        ? Contract.shellOf(cno, customerShell, 0L)
+                        : null;
                 String st = rs.getString("status");
                 ClaimRequestStatus status = ClaimRequestStatus.DRAFT;
                 if (st != null) {
@@ -62,6 +59,6 @@ public class ClaimRequestDAO {
 
     public static boolean existsByClaimNo(String claimNo) {
         return DBA.exists(
-            "SELECT 1 FROM damage_investigations WHERE claim_no=?", claimNo);
+            "SELECT 1 FROM claim_requests WHERE claim_no=?", claimNo);
     }
 }
