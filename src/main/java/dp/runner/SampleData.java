@@ -5,6 +5,7 @@ import dp.common.BankAccount;
 import dp.consultation.InsuranceProduct;
 import dp.contract.Contract;
 import dp.dao.*;
+import dp.db.SequenceSync;
 import dp.payment.OverdueNoticeSetting;
 
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class SampleData {
     private SampleData() {}
 
     public static void initialize() {
+        SequenceSync.sync();
         if (!InsuranceProductDAO.findAll().isEmpty()) {
             System.out.println("[시스템] 샘플 데이터 초기화 완료 (기존 데이터 사용)");
             return;
