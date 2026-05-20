@@ -1,6 +1,8 @@
 package dp.runner.usecase;
 
+import dp.actor.SalesManager;
 import dp.dao.SalesActivityManagementDAO;
+import dp.dao.SalesManagerDAO;
 import dp.enums.ChannelType;
 import dp.runner.ConsoleHelper;
 import dp.sales.SalesActivityManagement;
@@ -49,7 +51,9 @@ public class SalesActivityRunner {
         // 1. 영업 관리자는 [영업 활동 관리] 항목을 클릭한다.
         ConsoleHelper.printStage("영업관리자", "[영업] 메뉴 > [영업 활동 관리] 항목을 클릭합니다.");
 
+        SalesManager manager = SalesManagerDAO.findAll().get(0);
         SalesActivityManagement activity = new SalesActivityManagement();
+        activity.setManagerName(manager.getName());
 
         // 2. 시스템은 채널별 영업활동 현황 테이블을 출력한다.
         activity.loadActivityTable();

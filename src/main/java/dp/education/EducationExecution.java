@@ -60,4 +60,5 @@ public class EducationExecution {
     public int getTotalCount() { return totalCount; }
     public String getMemo() { return memo; }
     public void setMemo(String memo) { this.memo = memo; }
+    public EducationPreparation getPreparation() { return preparation; }
 }

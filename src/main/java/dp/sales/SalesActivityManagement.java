@@ -20,6 +20,7 @@ public class SalesActivityManagement {
     private Double achievementRate;        // 목표달성률 - 실적/목표 %
     private String improvementContent;     // 개선 지시 내용
     private Integer revisedTarget;         // 수정 목표
+    private String managerName;            // 담당 영업 관리자명
     private String managementNo;           // 관리번호
     private LocalDateTime registeredAt;    // 등록 일시
 
@@ -53,6 +54,8 @@ public class SalesActivityManagement {
     public void navigateToRecruitment() {}
 
     // Runner에서 실제 사용하는 getter/setter만 유지
+    public String getManagerName() { return managerName; }
+    public void setManagerName(String managerName) { this.managerName = managerName; }
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
     public void setChannelType(ChannelType channelType) { this.channelType = channelType; }
