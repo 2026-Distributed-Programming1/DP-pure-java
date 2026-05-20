@@ -38,8 +38,8 @@ public class SampleData {
         EducationTrainerDAO.save(new EducationTrainer("김영교", "010-1111-2222", "trainer@ins.com"));
         SalesManagerDAO.save(new SalesManager("이영관", "010-3333-4444", "manager@ins.com"));
         InsuranceReviewerDAO.save(new InsuranceReviewer("박심사", "010-5555-6666", "reviewer@ins.com"));
-        DesignerDAO.save(new Designer(1, "최설계", "서울", "L-2024-001"));
-        AgencyDAO.save(new Agency(2, "한국대리점", "부산", "A-2024-001"));
+        DesignerDAO.save(new Designer("1", "최설계", "서울", "L-2024-001"));
+        AgencyDAO.save(new Agency("2", "한국대리점", "부산", "A-2024-001"));
     }
 
     private static void createInsuranceProducts() {
