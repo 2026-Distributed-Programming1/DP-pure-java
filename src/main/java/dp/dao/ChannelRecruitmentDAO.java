@@ -15,7 +15,7 @@ public class ChannelRecruitmentDAO {
             + " VALUES (?,?,?,?,?,?)"
             + " ON DUPLICATE KEY UPDATE channel_type=VALUES(channel_type)",
             r.getRecruitmentNo(),
-            null,
+            r.getManagerName(),
             null,
             channelType,
             null,
@@ -24,15 +24,22 @@ public class ChannelRecruitmentDAO {
 
     public static List<ChannelRecruitment> findAll() {
         return DBA.executeQuery(
-            "SELECT recruitment_no, channel_type, created_at FROM channel_recruitments",
+            "SELECT recruitment_no, channel_type, manager_name, created_at"
+            + " FROM channel_recruitments",
             rs -> {
-                ChannelRecruitment r = new ChannelRecruitment();
                 String ct = rs.getString("channel_type");
+                ChannelType channelType = null;
                 if (ct != null) {
-                    try { r.setChannelType(ChannelType.valueOf(ct)); }
+                    try { channelType = ChannelType.valueOf(ct); }
                     catch (IllegalArgumentException ignored) {}
                 }
-                return r;
+                java.sql.Timestamp ts = rs.getTimestamp("created_at");
+                java.time.LocalDateTime registeredAt = ts != null ? ts.toLocalDateTime() : null;
+                return ChannelRecruitment.fromDb(
+                        rs.getString("recruitment_no"),
+                        channelType,
+                        rs.getString("manager_name"),
+                        registeredAt);
             });
     }
 }

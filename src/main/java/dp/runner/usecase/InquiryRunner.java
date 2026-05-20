@@ -1,5 +1,7 @@
 package dp.runner.usecase;
 
+import dp.actor.Customer;
+import dp.dao.CustomerDAO;
 import dp.enums.FaqCategory;
 import dp.enums.InquiryStatus;
 import dp.enums.InquiryType;
@@ -7,6 +9,7 @@ import dp.inquiry.CustomerCenterPage;
 import dp.inquiry.Inquiry;
 import dp.dao.InquiryDAO;
 import dp.runner.ConsoleHelper;
+import java.util.List;
 
 /**
  * UC: 문의한다 시나리오 진행자
@@ -47,6 +50,18 @@ public class InquiryRunner {
         ConsoleHelper.printDoubleDivider();
         System.out.println("UC: 문의한다");
         ConsoleHelper.printDoubleDivider();
+
+        // 고객 선택
+        List<Customer> customers = CustomerDAO.findAll();
+        if (customers.isEmpty()) {
+            ConsoleHelper.printError("등록된 고객이 없습니다.");
+            return;
+        }
+        String[] customerOptions = customers.stream()
+                .map(c -> c.getName() + " (" + c.getCustomerNo() + ")")
+                .toArray(String[]::new);
+        int customerChoice = ConsoleHelper.readMenuChoice("[시스템] 고객을 선택하세요:", customerOptions);
+        Customer customer = customers.get(customerChoice - 1);
 
         // 1. 고객은 [고객센터] 버튼을 클릭한다.
         ConsoleHelper.printStage("고객", "[고객센터] 버튼을 클릭합니다.");
@@ -105,6 +120,7 @@ public class InquiryRunner {
 
         // Basic Path - [1:1 문의] 탭
         Inquiry inquiry = new Inquiry();
+        inquiry.setCustomerName(customer.getName());
         ConsoleHelper.printStage("고객", "[1:1 문의] 탭을 클릭합니다.");
 
         // 3. 고객은 문의 유형 드롭다운에서 하나를 선택한다.

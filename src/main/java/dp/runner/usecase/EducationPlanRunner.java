@@ -47,6 +47,7 @@ public class EducationPlanRunner {
         ConsoleHelper.printStage("시스템", "교육계획안 작성 화면을 출력합니다.");
         ConsoleHelper.printInfo("입력 항목: 교육명 / 채널유형 / 대상자수 / 예산 / 시작일 / 종료일");
         EducationPlan plan = trainer.createEducationPlan();
+        plan.setTrainerName(trainer.getName());
 
         // 3. 영업교육 담당자는 교육 기본 정보를 입력한다.
         ConsoleHelper.printStage("영업교육담당자", "교육 기본 정보를 입력합니다.");

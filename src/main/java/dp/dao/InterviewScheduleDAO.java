@@ -22,17 +22,20 @@ public class InterviewScheduleDAO {
             "SELECT schedule_no, customer_name, scheduled_at, location, status"
             + " FROM interview_schedules",
             rs -> {
+                String scheduleNo = rs.getString("schedule_no");
+                int interviewNumber = 0;
+                if (scheduleNo != null) {
+                    try { interviewNumber = Integer.parseInt(scheduleNo); }
+                    catch (NumberFormatException ignored) {}
+                }
                 java.sql.Timestamp ts = rs.getTimestamp("scheduled_at");
                 java.time.LocalDateTime scheduledAt = ts != null ? ts.toLocalDateTime() : null;
-                return new InterviewSchedule(
-                    rs.getInt("schedule_no"),
-                    rs.getString("customer_name"),
-                    null,
-                    scheduledAt,
-                    rs.getString("location"),
-                    null,
-                    rs.getString("status"),
-                    new ArrayList<>());
+                return InterviewSchedule.fromDb(
+                        interviewNumber,
+                        rs.getString("customer_name"),
+                        scheduledAt,
+                        rs.getString("location"),
+                        rs.getString("status"));
             });
     }
 }

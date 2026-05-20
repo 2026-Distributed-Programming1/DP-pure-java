@@ -35,6 +35,24 @@ public class PolicyApplication {
         this.applicationNumber = sequence;
     }
 
+    private PolicyApplication(boolean fromDb) {}
+
+    public static PolicyApplication fromDb(int applicationNumber, String customerId,
+                                            String customerName, String productName,
+                                            int period, String paymentMethod) {
+        PolicyApplication pa = new PolicyApplication(true);
+        pa.applicationNumber = applicationNumber;
+        if (customerId != null) {
+            pa.customer = new dp.actor.Customer(
+                    customerId, customerName != null ? customerName : "", null, null, null);
+        }
+        pa.customerName = customerName;
+        pa.productName = productName;
+        pa.period = period;
+        pa.paymentMethod = paymentMethod;
+        return pa;
+    }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
         this.customerName = customer.getName();

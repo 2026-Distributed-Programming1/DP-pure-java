@@ -20,12 +20,17 @@ public class InterviewRecordDAO {
     public static List<InterviewRecord> findAll() {
         return DBA.executeQuery(
             "SELECT record_no, customer_name, content FROM interview_records",
-            rs -> new InterviewRecord(
-                rs.getInt("record_no"),
-                rs.getString("customer_name"),
-                null,
-                rs.getString("content"),
-                null,
-                null));
+            rs -> {
+                String recordNo = rs.getString("record_no");
+                int recordNumber = 0;
+                if (recordNo != null) {
+                    try { recordNumber = Integer.parseInt(recordNo); }
+                    catch (NumberFormatException ignored) {}
+                }
+                return InterviewRecord.fromDb(
+                        recordNumber,
+                        rs.getString("customer_name"),
+                        rs.getString("content"));
+            });
     }
 }

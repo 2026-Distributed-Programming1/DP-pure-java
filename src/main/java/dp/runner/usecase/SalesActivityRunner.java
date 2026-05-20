@@ -1,11 +1,14 @@
 package dp.runner.usecase;
 
+import dp.actor.SalesManager;
 import dp.dao.SalesActivityManagementDAO;
+import dp.dao.SalesManagerDAO;
 import dp.enums.ChannelType;
 import dp.runner.ConsoleHelper;
 import dp.sales.SalesActivityManagement;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * UC: 영업 활동을 관리한다 시나리오 진행자
@@ -49,11 +52,23 @@ public class SalesActivityRunner {
         // 1. 영업 관리자는 [영업 활동 관리] 항목을 클릭한다.
         ConsoleHelper.printStage("영업관리자", "[영업] 메뉴 > [영업 활동 관리] 항목을 클릭합니다.");
 
+        SalesManager manager = SalesManagerDAO.findAll().get(0);
         SalesActivityManagement activity = new SalesActivityManagement();
+        activity.setManagerName(manager.getName());
 
         // 2. 시스템은 채널별 영업활동 현황 테이블을 출력한다.
         activity.loadActivityTable();
         ConsoleHelper.printStage("시스템", "채널별 영업활동 현황 테이블을 출력합니다.");
+        List<SalesActivityManagement> activityList = SalesActivityManagementDAO.findAll();
+        if (activityList.isEmpty()) {
+            ConsoleHelper.printInfo("  (저장된 영업활동 데이터가 없습니다.)");
+        } else {
+            ConsoleHelper.printInfo("  번호 | 채널명 | 등록일시");
+            for (int i = 0; i < activityList.size(); i++) {
+                SalesActivityManagement a = activityList.get(i);
+                ConsoleHelper.printInfo("  " + (i + 1) + " | " + a.getChannelName() + " | " + a.getRegisteredAt());
+            }
+        }
 
         // 3. 영업 관리자는 조회 조건(관리 기간, 채널 유형)을 입력하고 [조회] 버튼을 클릭한다.
         ConsoleHelper.printStage("영업관리자", "조회 조건을 입력합니다.");

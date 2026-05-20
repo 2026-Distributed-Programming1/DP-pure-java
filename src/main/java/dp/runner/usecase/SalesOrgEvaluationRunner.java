@@ -7,6 +7,7 @@ import dp.runner.ConsoleHelper;
 import dp.sales.SalesOrgEvaluation;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * UC: 영업조직을 평가한다 시나리오 진행자
@@ -57,6 +58,17 @@ public class SalesOrgEvaluationRunner {
         // 2. 시스템은 채널별 성과 현황 테이블을 출력한다.
         evaluation.loadPerformanceTable();
         ConsoleHelper.printStage("시스템", "채널별 성과 현황 테이블을 출력합니다.");
+        List<SalesOrgEvaluation> evaluationList = SalesOrgEvaluationDAO.findAll();
+        if (evaluationList.isEmpty()) {
+            ConsoleHelper.printInfo("  (저장된 평가 데이터가 없습니다.)");
+        } else {
+            ConsoleHelper.printInfo("  번호 | 채널명 | 평가등급");
+            for (int i = 0; i < evaluationList.size(); i++) {
+                SalesOrgEvaluation e = evaluationList.get(i);
+                String grade = e.getEvaluationGrade() != null ? e.getEvaluationGrade().name() : "-";
+                ConsoleHelper.printInfo("  " + (i + 1) + " | " + e.getChannelName() + " | " + grade);
+            }
+        }
 
         // 3. 영업 관리자는 조회 조건(평가 기간, 채널 유형)을 입력하고 [조회] 버튼을 클릭한다.
         ConsoleHelper.printStage("영업관리자", "조회 조건을 입력합니다.");

@@ -2,6 +2,7 @@ package dp.dao;
 
 import dp.db.DBA;
 import dp.sales.SalesActivityManagement;
+import java.util.List;
 
 public class SalesActivityManagementDAO {
 
@@ -12,9 +13,19 @@ public class SalesActivityManagementDAO {
             + " VALUES (?,?,?,?,?)"
             + " ON DUPLICATE KEY UPDATE channel_name=VALUES(channel_name)",
             a.getManagementNo(),
-            null,
+            a.getManagerName(),
             a.getChannelName(),
             null,
             a.getRegisteredAt());
+    }
+
+    public static List<SalesActivityManagement> findAll() {
+        return DBA.executeQuery(
+            "SELECT activity_no, channel_name, created_at FROM sales_activity_managements",
+            rs -> {
+                SalesActivityManagement a = new SalesActivityManagement();
+                a.setChannelName(rs.getString("channel_name"));
+                return a;
+            });
     }
 }

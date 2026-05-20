@@ -29,13 +29,13 @@ public class InsuranceApplicationDAO {
     public static List<InsuranceApplication> findAll() {
         return DBA.executeQuery(
             "SELECT application_no, customer_id, customer_name, product_name,"
-            + " payment_method FROM insurance_applications",
-            rs -> new InsuranceApplication(
+            + " monthly_premium, payment_method FROM insurance_applications",
+            rs -> InsuranceApplication.fromDb(
                 rs.getInt("application_no"),
-                null,
-                null,
-                null,
-                rs.getString("payment_method"),
-                new ArrayList<>()));
+                rs.getString("customer_id"),
+                rs.getString("customer_name"),
+                rs.getString("product_name"),
+                rs.getLong("monthly_premium"),
+                rs.getString("payment_method")));
     }
 }

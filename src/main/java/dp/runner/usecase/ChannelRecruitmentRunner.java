@@ -50,6 +50,7 @@ public class ChannelRecruitmentRunner {
 
         // 2. 시스템은 채널 모집 화면을 출력한다.
         ChannelRecruitment recruitment = new ChannelRecruitment();
+        recruitment.setManagerName(manager.getName());
         recruitment.loadRecruitmentList();
         ConsoleHelper.printStage("시스템", "채널 모집 화면을 출력합니다.");
         ConsoleHelper.printInfo(" ───────────────────────────────────────────────────────── ");

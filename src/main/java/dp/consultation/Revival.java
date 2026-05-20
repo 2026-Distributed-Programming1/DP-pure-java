@@ -1,5 +1,6 @@
 package dp.consultation;
 
+import dp.actor.Customer;
 import java.time.LocalDateTime;
 
 /**
@@ -11,6 +12,7 @@ public class Revival {
     private static int sequence = 0;
 
     private int revivalNumber;
+    private Customer customer;
     private LocalDateTime appliedAt;
     private long unpaidAmount;
     private String paymentMethod;
@@ -52,6 +54,8 @@ public class Revival {
     }
 
     public int getRevivalNumber() { return revivalNumber; }
+    public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer customer) { this.customer = customer; }
     public LocalDateTime getAppliedAt() { return appliedAt; }
     public long getUnpaidAmount() { return unpaidAmount; }
     public void setUnpaidAmount(long unpaidAmount) { this.unpaidAmount = unpaidAmount; }

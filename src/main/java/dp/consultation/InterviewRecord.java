@@ -32,6 +32,16 @@ public class InterviewRecord {
         this.recordNumber = sequence;
     }
 
+    private InterviewRecord(boolean fromDb) {}
+
+    public static InterviewRecord fromDb(int recordNumber, String customerName, String content) {
+        InterviewRecord r = new InterviewRecord(true);
+        r.recordNumber  = recordNumber;
+        r.customerName  = customerName;
+        r.content       = content;
+        return r;
+    }
+
     public void save(String content, String customerReaction, String followUpAction) {
         this.content = content;
         this.customerReaction = customerReaction;

@@ -7,6 +7,7 @@ import dp.contract.Contract;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 /**
  * UC: 계약 정보를 조회한다 시나리오 진행자
@@ -50,7 +51,6 @@ public class ContractInfoRunner {
 
         // 2. 시스템은 필터링한 조건에 맞는 계약 목록 테이블을 출력한다. (A1, A2, E1)
         contract.search();
-        ConsoleHelper.printStage("시스템", "계약 목록 테이블을 출력합니다.");
 
         // E1) 페이지 출력 오류 시뮬레이션
         boolean pageError = ConsoleHelper.readYesNo("  [E1] 페이지 출력 오류를 시뮬레이션하시겠습니까?");
@@ -60,7 +60,6 @@ public class ContractInfoRunner {
                     "[계약관리담당자] 처리를 선택하세요.",
                     "다시 시도", "목록으로 돌아가기");
             if (retryAction == 1) {
-                // 다시 시도 → Basic Path 2번으로 이동
                 contract.retry();
                 ConsoleHelper.printInfo("[E1] 다시 시도합니다. Basic Path 2번으로 이동합니다.");
             }
@@ -70,67 +69,65 @@ public class ContractInfoRunner {
 
         // 필터링 조건 입력
         ConsoleHelper.printStage("계약관리담당자", "필터링 조건을 입력합니다.");
+        ConsoleHelper.printInfo("  보험 종류 예시: 생명보험, 실손의료보험, 종신보험, 자동차보험");
         String filterType = ConsoleHelper.readLine("  보험 종류 필터 (없으면 엔터 - A1 전체 조회): ");
 
-        // A1) 필터링 없이 조회 시 전체 목록 출력
+        // DB에서 계약 목록 로드 후 필터 적용
+        List<Contract> allList = ContractDAO.findAll();
+        List<Contract> contractList = allList.stream()
+                .filter(c -> filterType.isEmpty()
+                        || (c.getInsuranceType() != null && c.getInsuranceType().contains(filterType)))
+                .collect(java.util.stream.Collectors.toList());
+
+        // A1) 필터링 없이 조회 시
         if (filterType.isEmpty()) {
-            ConsoleHelper.printStage("시스템", "[A1] 전체 계약 목록을 최근 등록순으로 페이지 당 20건 출력합니다.");
+            ConsoleHelper.printStage("시스템", "[A1] 전체 계약 목록을 출력합니다.");
         }
 
-        // 계약 정보 입력 (조회 결과 시뮬레이션)
-        boolean hasResult = ConsoleHelper.readYesNo("  조회된 계약이 있습니까?");
-        if (!hasResult) {
-            // A2) 필터링과 일치하는 계약이 존재하지 않는 경우
+        // A2) 조회 결과 없는 경우
+        if (contractList.isEmpty()) {
             contract.showNotFoundMessage();
             ConsoleHelper.printStage("시스템", "[A2] 조회 결과가 없습니다.");
             ConsoleHelper.waitEnter();
             return;
         }
 
-        // 계약 정보 입력
-        String contractNo = ConsoleHelper.readNonEmpty("  계약번호: ");
-        contract.setContractNo(contractNo);
-        String insuranceType = ConsoleHelper.readNonEmpty("  보험 종류: ");
-        contract.setInsuranceType(insuranceType);
-        LocalDate startDate = ConsoleHelper.readDate("  계약 시작일");
-        contract.setStartDate(startDate);
-        LocalDate endDate = ConsoleHelper.readDate("  계약 종료일");
-        contract.setEndDate(endDate);
-        long monthlyPremium = ConsoleHelper.readLong("  월 보험료 (원): ");
-        contract.setMonthlyPremium(monthlyPremium);
-
-        int statusChoice = ConsoleHelper.readMenuChoice("  계약 상태를 선택하세요.", "정상", "만기");
-        contract.setStatus(statusChoice == 1 ? ContractStatus.NORMAL : ContractStatus.EXPIRED);
-
-        int totalPay = ConsoleHelper.readPositiveInt("  전체 납입 횟수: ");
-        contract.setTotalPayCount(totalPay);
-        int paidCount = ConsoleHelper.readInt("  정상 납입 횟수: ");
-        contract.setPaidCount(paidCount);
-        LocalDate lastPayDate = ConsoleHelper.readDate("  최근 납입일");
-        contract.setLastPaymentDate(lastPayDate);
-        boolean isOverdue = ConsoleHelper.readYesNo("  연체 여부");
-        contract.setIsOverdue(isOverdue);
-        if (isOverdue) {
-            int overdueCount = ConsoleHelper.readPositiveInt("  연체 횟수: ");
-            contract.setOverdueCount(overdueCount);
+        // 계약 목록 출력
+        ConsoleHelper.printStage("시스템", "계약 목록 테이블을 출력합니다.");
+        ConsoleHelper.printInfo("  번호 | 계약번호 | 고객명 | 보험종류 | 기간 | 상태");
+        for (int i = 0; i < contractList.size(); i++) {
+            Contract c = contractList.get(i);
+            String customerName = c.getCustomer() != null ? c.getCustomer().getName() : "-";
+            String status = c.getStatus() == ContractStatus.NORMAL ? "정상"
+                    : c.getStatus() == ContractStatus.EXPIRED ? "만기" : "해지";
+            ConsoleHelper.printInfo("  " + (i + 1) + " | " + c.getContractNo()
+                    + " | " + customerName
+                    + " | " + c.getInsuranceType()
+                    + " | " + c.getStartDate() + " ~ " + c.getEndDate()
+                    + " | " + status);
         }
 
-        // 만기 임박 여부 자동 판단 (30일 이내)
-        long daysUntilExpiry = ChronoUnit.DAYS.between(LocalDate.now(), endDate);
-        contract.setIsExpiringSoon(daysUntilExpiry <= 30 && daysUntilExpiry >= 0);
-
         // 3. 계약관리 담당자는 계약 목록에서 해당 계약의 행을 클릭한다.
-        ConsoleHelper.printStage("계약관리담당자", "계약 목록에서 해당 계약의 행을 클릭합니다.");
+        ConsoleHelper.printStage("계약관리담당자", "조회할 계약 번호를 선택합니다.");
+        int selected = ConsoleHelper.readMenuChoice("  계약을 선택하세요.",
+                contractList.stream().map(Contract::getContractNo).toArray(String[]::new));
+        contract = contractList.get(selected - 1);
+
+        // 만기 임박 여부 재계산
+        LocalDate endDate = contract.getEndDate();
+        long daysUntilExpiry = endDate != null ? ChronoUnit.DAYS.between(LocalDate.now(), endDate) : -1;
+        contract.setIsExpiringSoon(daysUntilExpiry >= 0 && daysUntilExpiry <= 30);
 
         // 4. 시스템은 계약 상세정보 패널을 출력한다.
         contract.getDetail();
         ConsoleHelper.printStage("시스템", "계약 상세정보 패널을 출력합니다.");
+        String customerName = contract.getCustomer() != null ? contract.getCustomer().getName() : "-";
         ConsoleHelper.printInfo("계약번호: " + contract.getContractNo()
+                + " | 고객명: " + customerName
                 + " | 보험종류: " + contract.getInsuranceType()
                 + " | 기간: " + contract.getStartDate() + " ~ " + contract.getEndDate()
                 + " | 월보험료: " + contract.getMonthlyPremium() + "원"
                 + " | 상태: " + (contract.getStatus() == ContractStatus.NORMAL ? "정상" : "만기")
-                + " | 납입: " + contract.getPaidCount() + "/" + contract.getTotalPayCount() + "회"
                 + " | 연체: " + (contract.getIsOverdue() ? contract.getOverdueCount() + "회" : "없음"));
 
         // A3) 만료일 기준 30일 이내인 경우
@@ -138,17 +135,12 @@ public class ContractInfoRunner {
             ConsoleHelper.printStage("시스템", "[A3] 이 계약은 [" + endDate + "]에 만료됩니다. 만기까지 [D-" + daysUntilExpiry + "] 남았습니다.");
         }
 
-        // A5) 특약 미가입 시
-        boolean hasSpecialClause = ConsoleHelper.readYesNo("  특약이 있습니까?");
-        if (hasSpecialClause) {
-            String clause = ConsoleHelper.readNonEmpty("  특약명: ");
-            ConsoleHelper.readLong("  특약 보험료 (원): ");
-            contract.getSpecialClauses().add(clause);
-            ConsoleHelper.printInfo("특약: " + String.join(", ", contract.getSpecialClauses()));
-        } else {
-            // A5) 특약 미가입
+        // A5) 특약 여부
+        if (contract.getSpecialClauses().isEmpty()) {
             contract.showNoSpecialClause();
             ConsoleHelper.printInfo("[A5] 가입된 특약 없음");
+        } else {
+            ConsoleHelper.printInfo("특약: " + String.join(", ", contract.getSpecialClauses()));
         }
 
         ContractDAO.save(contract);
@@ -162,10 +154,12 @@ public class ContractInfoRunner {
             // A3) [만기 계약 관리] → [만기 계약을 관리한다] 유스케이스로 이동
             contract.navigateToExpiry();
             ConsoleHelper.printInfo("[A3] [만기 계약을 관리한다] 유스케이스 1번으로 이동합니다.");
+            ExpiringContractManagementRunner.run();
         } else if (action == 2) {
             // A4) [계약 통계] → [계약 통계 정보를 관리한다] 유스케이스로 이동
             contract.navigateToStats();
             ConsoleHelper.printInfo("[A4] [계약 통계 정보를 관리한다] 유스케이스 1번으로 이동합니다.");
+            ContractStatisticsRunner.run();
         }
 
         ConsoleHelper.waitEnter();

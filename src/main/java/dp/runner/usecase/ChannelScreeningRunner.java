@@ -6,6 +6,7 @@ import dp.runner.ConsoleHelper;
 import dp.sales.ChannelScreening;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * UC: 판매채널 채용을 심사한다 시나리오 진행자
@@ -53,7 +54,21 @@ public class ChannelScreeningRunner {
         // 2. 시스템은 지원자 목록 화면을 출력한다.
         screening.loadApplicantList();
         ConsoleHelper.printStage("시스템", "지원자 목록 화면을 출력합니다.");
-        ConsoleHelper.printInfo("테이블 컬럼: 지원자명 / 채널유형 / 지원일 / 경력 / 자격증 / 심사상태");
+        ConsoleHelper.printInfo("테이블 컬럼: 지원자명 / 채널유형 / 경력 / 심사상태");
+        List<ChannelScreening> screeningList = ChannelScreeningDAO.findAll();
+        if (screeningList.isEmpty()) {
+            ConsoleHelper.printInfo("  (저장된 지원자 데이터가 없습니다.)");
+        } else {
+            ConsoleHelper.printInfo("  번호 | 지원자명 | 채널유형 | 경력 | 심사상태");
+            for (int i = 0; i < screeningList.size(); i++) {
+                ChannelScreening s = screeningList.get(i);
+                String ct = s.getChannelType() != null ? (s.getChannelType() == ChannelType.DESIGNER ? "설계사" : "대리점") : "-";
+                ConsoleHelper.printInfo("  " + (i + 1) + " | " + s.getApplicantName()
+                        + " | " + ct
+                        + " | " + (s.getCareer() != null ? s.getCareer() : "없음")
+                        + " | " + s.getScreeningStatus());
+            }
+        }
 
         // 3. 영업 관리자는 조회 조건을 입력하고 [조회] 버튼을 클릭한다.
         ConsoleHelper.printStage("영업관리자", "조회 조건을 입력합니다.");
