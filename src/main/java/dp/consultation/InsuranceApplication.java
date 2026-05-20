@@ -26,6 +26,26 @@ public class InsuranceApplication {
         this.selectedSpecialTerms = new ArrayList<>();
     }
 
+    private InsuranceApplication(boolean fromDb) {
+        this.selectedSpecialTerms = new ArrayList<>();
+    }
+
+    public static InsuranceApplication fromDb(int applicationNumber, String customerId,
+                                               String customerName, String productName,
+                                               long monthlyPremium, String paymentMethod) {
+        InsuranceApplication ia = new InsuranceApplication(true);
+        ia.applicationNumber = applicationNumber;
+        if (customerId != null) {
+            ia.customer = new dp.actor.Customer(
+                    customerId, customerName != null ? customerName : "", null, null, null);
+        }
+        if (productName != null) {
+            ia.product = new InsuranceProduct(productName, null, monthlyPremium, null, null);
+        }
+        ia.paymentMethod = paymentMethod;
+        return ia;
+    }
+
     public void setCustomer(Customer customer) { this.customer = customer; }
     public Customer getCustomer() { return customer; }
 
