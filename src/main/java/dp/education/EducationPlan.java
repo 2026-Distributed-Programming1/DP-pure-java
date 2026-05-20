@@ -1,7 +1,6 @@
 package dp.education;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * 교육계획안 (EducationPlan)
@@ -20,6 +19,18 @@ public class EducationPlan {
     private long budget;
     private String status;
 
+    public EducationPlan(int planNumber, String educationName, LocalDate startDate, LocalDate endDate,
+                         String channelType, int targetCount, long budget, String status) {
+        this.planNumber = planNumber;
+        this.educationName = educationName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.channelType = channelType;
+        this.targetCount = targetCount;
+        this.budget = budget;
+        this.status = status;
+    }
+
     public EducationPlan() {
         sequence += 1;
         this.planNumber = sequence;
@@ -27,7 +38,7 @@ public class EducationPlan {
     }
 
     public void enterPlanInfo(String educationName, LocalDate startDate, LocalDate endDate,
-                               String channelType, int targetCount, long budget) {
+                              String channelType, int targetCount, long budget) {
         this.educationName = educationName;
         this.startDate = startDate;
         this.endDate = endDate;

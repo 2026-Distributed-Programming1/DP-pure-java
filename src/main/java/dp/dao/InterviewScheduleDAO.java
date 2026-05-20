@@ -2,6 +2,7 @@ package dp.dao;
 
 import dp.consultation.InterviewSchedule;
 import dp.db.DBA;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InterviewScheduleDAO {
@@ -21,13 +22,17 @@ public class InterviewScheduleDAO {
             "SELECT schedule_no, customer_name, scheduled_at, location, status"
             + " FROM interview_schedules",
             rs -> {
-                InterviewSchedule s = new InterviewSchedule();
                 java.sql.Timestamp ts = rs.getTimestamp("scheduled_at");
                 java.time.LocalDateTime scheduledAt = ts != null ? ts.toLocalDateTime() : null;
-                s.register(rs.getString("customer_name"), scheduledAt,
-                    rs.getString("location"), null);
-                s.setStatus(rs.getString("status"));
-                return s;
+                return new InterviewSchedule(
+                    rs.getInt("schedule_no"),
+                    rs.getString("customer_name"),
+                    null,
+                    scheduledAt,
+                    rs.getString("location"),
+                    null,
+                    rs.getString("status"),
+                    new ArrayList<>());
             });
     }
 }

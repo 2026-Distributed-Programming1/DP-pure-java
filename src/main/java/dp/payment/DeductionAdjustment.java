@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * RefundCalculation의 집약(Aggregation) 부품으로, 한 건의 환급금 산출에 대해
  * 여러 개의 조정이 발생할 수 있다.
  */
-public class DeductionAdjustment {
+public class   DeductionAdjustment {
 
     private String itemName;             // 공제 항목명
     private long originalAmount;         // 원래 금액

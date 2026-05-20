@@ -24,16 +24,17 @@ public class EducationPlanDAO {
         return DBA.executeQuery(
             "SELECT plan_no, title, target_audience, scheduled_date, status FROM education_plans",
             rs -> {
-                EducationPlan p = new EducationPlan();
                 java.sql.Date sd = rs.getDate("scheduled_date");
                 java.time.LocalDate startDate = sd != null ? sd.toLocalDate() : null;
-                p.enterPlanInfo(
+                return new EducationPlan(
+                    rs.getInt("plan_no"),
                     rs.getString("title"),
-                    startDate, startDate,
+                    startDate,
+                    startDate,
                     rs.getString("target_audience"),
-                    0, 0L);
-                p.setStatus(rs.getString("status"));
-                return p;
+                    0,
+                    0L,
+                    rs.getString("status"));
             });
     }
 }

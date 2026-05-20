@@ -2,6 +2,7 @@ package dp.dao;
 
 import dp.db.DBA;
 import dp.education.EducationPreparation;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EducationPreparationDAO {
@@ -23,13 +24,13 @@ public class EducationPreparationDAO {
     public static List<EducationPreparation> findAll() {
         return DBA.executeQuery(
             "SELECT prep_no, trainer_name, venue, status FROM education_preparations",
-            rs -> {
-                EducationPreparation e = new EducationPreparation();
-                e.enterPreparationInfo(
-                    rs.getString("venue"),
-                    rs.getString("trainer_name"),
-                    null);
-                return e;
-            });
+            rs -> new EducationPreparation(
+                rs.getInt("prep_no"),
+                null,
+                rs.getString("venue"),
+                rs.getString("trainer_name"),
+                null,
+                null,
+                new ArrayList<>()));
     }
 }

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 보험신청 (InsuranceApplication)
- * UC: 보험을 신청한다
+ * 보험가입신청서 (InsuranceApplication)
+ * UC: 보험 가입을 신청한다
  */
 public class InsuranceApplication {
 
@@ -19,6 +19,16 @@ public class InsuranceApplication {
     private LocalDateTime appliedAt;
     private String paymentMethod;
     private List<String> selectedSpecialTerms;
+
+    public InsuranceApplication(int applicationNumber, Customer customer, InsuranceProduct product,
+                                LocalDateTime appliedAt, String paymentMethod, List<String> selectedSpecialTerms) {
+        this.applicationNumber = applicationNumber;
+        this.customer = customer;
+        this.product = product;
+        this.appliedAt = appliedAt;
+        this.paymentMethod = paymentMethod;
+        this.selectedSpecialTerms = selectedSpecialTerms != null ? selectedSpecialTerms : new ArrayList<>();
+    }
 
     public InsuranceApplication() {
         sequence += 1;
@@ -32,8 +42,7 @@ public class InsuranceApplication {
     public void setProduct(InsuranceProduct product) { this.product = product; }
     public InsuranceProduct getProduct() { return product; }
 
-    public void enterPersonalInfo(String name, String birthDate,
-                                   String contact, String address) {
+    public void enterPersonalInfo(String name, String birthDate, String contact, String address) {
         System.out.println("  [시스템] 개인정보가 입력되었습니다.");
     }
 
